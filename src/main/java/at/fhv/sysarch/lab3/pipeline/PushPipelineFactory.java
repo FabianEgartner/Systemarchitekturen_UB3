@@ -1,11 +1,16 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
+import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
 import javafx.animation.AnimationTimer;
+import javafx.scene.paint.Color;
+
+import java.util.List;
 
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
+
         // TODO: push from the source (model)
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
@@ -32,6 +37,7 @@ public class PushPipelineFactory {
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
         return new AnimationRenderer(pd) {
+
             // TODO rotation variable goes in here
 
             /** This method is called for every frame from the JavaFX Animation
@@ -41,6 +47,28 @@ public class PushPipelineFactory {
              */
             @Override
             protected void render(float fraction, Model model) {
+
+                // render static line
+//                pd.getGraphicsContext().setStroke(Color.RED);
+//                pd.getGraphicsContext().strokeLine(150,150,250,250);
+
+                // render single face of model
+//                pd.getGraphicsContext().setStroke(Color.YELLOW);
+//                Face face = model.getFaces().get(0);
+//                pd.getGraphicsContext().strokeLine(face.getV1().getX(), face.getV1().getY(), face.getV2().getX(), face.getV2().getY());
+
+                // render all faces of model
+//                pd.getGraphicsContext().setStroke(Color.YELLOW);
+                pd.getGraphicsContext().setStroke(pd.getModelColor());
+                List<Face> faces = model.getFaces();
+
+                final int GROW = 100;
+
+                for (Face face : faces) {
+                    pd.getGraphicsContext().strokeLine(face.getV1().getX()*GROW, face.getV1().getY()*GROW, face.getV2().getX()*GROW, face.getV2().getY()*GROW);
+                    pd.getGraphicsContext().strokeLine(face.getN1().getX()*GROW, face.getN1().getY()*GROW, face.getN2().getX()*GROW, face.getN2().getY()*GROW);
+                }
+
                 // TODO compute rotation in radians
 
                 // TODO create new model rotation matrix using pd.modelRotAxis

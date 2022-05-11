@@ -8,13 +8,13 @@ public class PullPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // TODO: pull from the source (model)
 
-        // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
+        // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates (see C.2 of Lecture Notes)
 
-        // TODO 2. perform backface culling in VIEW SPACE
+        // TODO 2. perform backface culling in VIEW SPACE (see C.4 of Lecture Notes)
 
-        // TODO 3. perform depth sorting in VIEW SPACE
+        // TODO 3. perform depth sorting in VIEW SPACE (see C.3 of Lecture Notes)
 
-        // TODO 4. add coloring (space unimportant)
+        // TODO 4. add coloring (space unimportant - see C.5 of Lecture Notes)
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
