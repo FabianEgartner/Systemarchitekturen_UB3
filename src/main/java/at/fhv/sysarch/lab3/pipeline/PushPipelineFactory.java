@@ -58,9 +58,6 @@ public class PushPipelineFactory {
 //                Face face = model.getFaces().get(0);
 //                pd.getGraphicsContext().strokeLine(face.getV1().getX(), face.getV1().getY(), face.getV2().getX(), face.getV2().getY());
 
-                // render all faces of model
-//                pd.getGraphicsContext().setStroke(Color.YELLOW);
-
                 List<Face> faces = model.getFaces();
                 final int GROW = 100;
 
