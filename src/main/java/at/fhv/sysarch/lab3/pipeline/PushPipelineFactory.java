@@ -3,6 +3,7 @@ package at.fhv.sysarch.lab3.pipeline;
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 
@@ -24,7 +25,7 @@ public class PushPipelineFactory {
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. TODO perform lighting in VIEW SPACE
-            
+
             // 5. TODO perform projection transformation on VIEW SPACE coordinates
         } else {
             // 5. TODO perform projection transformation
@@ -59,14 +60,81 @@ public class PushPipelineFactory {
 
                 // render all faces of model
 //                pd.getGraphicsContext().setStroke(Color.YELLOW);
-                pd.getGraphicsContext().setStroke(pd.getModelColor());
-                List<Face> faces = model.getFaces();
 
+                List<Face> faces = model.getFaces();
                 final int GROW = 100;
 
-                for (Face face : faces) {
-                    pd.getGraphicsContext().strokeLine(face.getV1().getX()*GROW, face.getV1().getY()*GROW, face.getV2().getX()*GROW, face.getV2().getY()*GROW);
-                    pd.getGraphicsContext().strokeLine(face.getN1().getX()*GROW, face.getN1().getY()*GROW, face.getN2().getX()*GROW, face.getN2().getY()*GROW);
+                // render wireframes
+                if (pd.getRenderingMode().equals(RenderingMode.WIREFRAME)) {
+                    pd.getGraphicsContext().setStroke(pd.getModelColor());
+
+                    for (Face face : faces) {
+                        String fx1 = Float.toString(face.getV1().getX() * GROW);
+                        double dx1 = Double.parseDouble(fx1);
+
+                        String fx2 = Float.toString(face.getV2().getX() * GROW);
+                        double dx2 = Double.parseDouble(fx2);
+
+                        String fx3 = Float.toString(face.getV3().getX() * GROW);
+                        double dx3 = Double.parseDouble(fx3);
+
+                        double[] x = {dx1, dx2, dx3};
+
+
+                        String fy1 = Float.toString(face.getV1().getY() * GROW);
+                        double dy1 = Double.parseDouble(fy1);
+
+                        String fy2 = Float.toString(face.getV2().getY() * GROW);
+                        double dy2 = Double.parseDouble(fy2);
+
+                        String fy3 = Float.toString(face.getV3().getY() * GROW);
+                        double dy3 = Double.parseDouble(fy3);
+
+                        double[] y = {dy1, dy2, dy3};
+
+                        pd.getGraphicsContext().strokePolygon(x, y, 3);
+                    }
+                }
+
+                // render filled
+                else if (pd.getRenderingMode().equals(RenderingMode.FILLED)) {
+                    pd.getGraphicsContext().setFill(pd.getModelColor());
+
+                    for (Face face : faces) {
+                        String fx1 = Float.toString(face.getV1().getX() * GROW);
+                        double dx1 = Double.parseDouble(fx1);
+
+                        String fx2 = Float.toString(face.getV2().getX() * GROW);
+                        double dx2 = Double.parseDouble(fx2);
+
+                        String fx3 = Float.toString(face.getV3().getX() * GROW);
+                        double dx3 = Double.parseDouble(fx3);
+
+                        double[] x = {dx1, dx2, dx3};
+
+
+                        String fy1 = Float.toString(face.getV1().getY() * GROW);
+                        double dy1 = Double.parseDouble(fy1);
+
+                        String fy2 = Float.toString(face.getV2().getY() * GROW);
+                        double dy2 = Double.parseDouble(fy2);
+
+                        String fy3 = Float.toString(face.getV3().getY() * GROW);
+                        double dy3 = Double.parseDouble(fy3);
+
+                        double[] y = {dy1, dy2, dy3};
+
+                        pd.getGraphicsContext().fillPolygon(x, y, 3);
+                    }
+                }
+
+                // render points
+                else {
+                    pd.getGraphicsContext().setStroke(pd.getModelColor());
+
+                    for (Face face : faces) {
+                        pd.getGraphicsContext().strokeLine(face.getV1().getX() * GROW, face.getV1().getY() * GROW, face.getV2().getX() * GROW, face.getV2().getY() * GROW);
+                    }
                 }
 
                 // TODO compute rotation in radians
