@@ -1,18 +1,16 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
-import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
-import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import javafx.animation.AnimationTimer;
-import javafx.scene.paint.Color;
-
-import java.util.List;
 
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
 
         // TODO: push from the source (model)
+        DataSource source = new DataSource();
+        PipelineData newPd = source.write(new Filter1(), pd);
+        source.write(new DataSink(), newPd);
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
 
@@ -57,7 +55,7 @@ public class PushPipelineFactory {
 //                pd.getGraphicsContext().setStroke(Color.YELLOW);
 //                Face face = model.getFaces().get(0);
 //                pd.getGraphicsContext().strokeLine(face.getV1().getX(), face.getV1().getY(), face.getV2().getX(), face.getV2().getY());
-
+/*
                 List<Face> faces = model.getFaces();
                 final int GROW = 100;
 
@@ -133,7 +131,7 @@ public class PushPipelineFactory {
                         pd.getGraphicsContext().strokeLine(face.getV1().getX() * GROW, face.getV1().getY() * GROW, face.getV2().getX() * GROW, face.getV2().getY() * GROW);
                     }
                 }
-
+*/
                 // TODO compute rotation in radians
 
                 // TODO create new model rotation matrix using pd.modelRotAxis
