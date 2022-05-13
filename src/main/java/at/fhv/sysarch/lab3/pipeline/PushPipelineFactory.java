@@ -23,8 +23,6 @@ public class PushPipelineFactory {
         toSink.setSuccessor(sink);
         filter.setPipeSuccessor(toSink);
 
-        source.write(pd.getModel());
-
         // TODO: push from the source (model)
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
@@ -61,6 +59,8 @@ public class PushPipelineFactory {
              */
             @Override
             protected void render(float fraction, Model model) {
+
+                source.write(pd.getModel());
 
                 // render static line
 //                pd.getGraphicsContext().setStroke(Color.RED);
