@@ -1,16 +1,31 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
+import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import javafx.animation.AnimationTimer;
+
+import java.util.List;
 
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
 
+        Filter source = new DataSource<>();
+        Filter filter = new ModelViewTransformation<>();
+        Filter sink = new DataSink<>(pd.getGraphicsContext(), pd.getRenderingMode());
+
+        Pipe pipe = new Pipe();
+        pipe.setSuccessor(filter);
+        source.setPipeSuccessor(pipe);
+
+        Pipe toSink = new Pipe();
+        toSink.setSuccessor(sink);
+        filter.setPipeSuccessor(toSink);
+
+        source.write(pd.getModel());
+
         // TODO: push from the source (model)
-        DataSource source = new DataSource();
-        PipelineData newPd = source.write(new Filter1(), pd);
-        source.write(new DataSink(), newPd);
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
 

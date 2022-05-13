@@ -1,5 +1,12 @@
 package at.fhv.sysarch.lab3.pipeline;
 
-public interface Filter {
-    PipelineData write(PipelineData pd);
+// TODO: Think about how generics can be applied in this context
+// TODO: The current solution is JUST an illustration and not sufficient for the example. It only shows how generics may be used.
+// TODO: Can you use one interface for both implementations (push and pull)? Or do they require specific interfaces?
+public interface Filter<I> {
+
+    void setPipeSuccessor(Pipe pipe);
+
+    void write(I input);
+
 }

@@ -6,10 +6,10 @@ import java.util.List;
 
 public class Pipe {
 
-    private Filter filter;
+    private Filter successor;
 
-    public Pipe(Filter filter) {
-        this.filter = filter;
+    public void setSuccessor (Filter successor) {
+        this.successor = successor;
     }
 
     public PipelineData write(PipelineData pd) {
