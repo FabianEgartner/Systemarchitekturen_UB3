@@ -3,7 +3,7 @@ package at.fhv.sysarch.lab3.pipeline;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
 
-public class DataSource {
+public class DataSource<I extends Model> implements Filter<I> {
 
     private Pipe successor;
 

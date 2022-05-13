@@ -2,8 +2,6 @@ package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.obj.Face;
 
-import java.util.List;
-
 public class Pipe {
 
     private Filter successor;
@@ -12,8 +10,8 @@ public class Pipe {
         this.successor = successor;
     }
 
-    public PipelineData write(PipelineData pd) {
-        System.out.println("Pipe got PipeLineData");
-        return this.filter.write(pd);
+    public void write(Face face) {
+        System.out.println("Pipe got Face");
+        this.successor.write(face);
     }
 }
