@@ -8,12 +8,12 @@ import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import com.hackoeur.jglm.Mat4;
 import javafx.scene.paint.Color;
 
-public class PerspectiveProjection implements Filter<Pair<Face, Color>, Pair<Face, Color>> {
+public class PerspectiveProjectionFilter implements Filter<Pair<Face, Color>, Pair<Face, Color>> {
 
     private Pipe<Pair<Face, Color>> successor;
     private final PipelineData pd;
 
-    public PerspectiveProjection(PipelineData pd) {
+    public PerspectiveProjectionFilter(PipelineData pd) {
         this.pd = pd;
     }
 

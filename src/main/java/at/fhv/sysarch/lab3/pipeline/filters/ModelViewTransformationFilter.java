@@ -6,13 +6,13 @@ import at.fhv.sysarch.lab3.pipeline.Pipe;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import com.hackoeur.jglm.Mat4;
 
-public class ModelViewTransformation<I extends Face> implements Filter<I, Face> {
+public class ModelViewTransformationFilter<I extends Face> implements Filter<I, Face> {
 
     private final PipelineData pd;
     private Pipe<Face> successor;
     private Mat4 rotationMatrix;
 
-    public ModelViewTransformation(PipelineData pd) {this.pd = pd; }
+    public ModelViewTransformationFilter(PipelineData pd) {this.pd = pd; }
 
     @Override
     public void write(I input) {

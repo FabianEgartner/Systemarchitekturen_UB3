@@ -7,12 +7,12 @@ import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import javafx.scene.paint.Color;
 
-public class ScreenSpaceTransformation implements Filter<Pair<Face, Color>, Pair<Face, Color>> {
+public class ScreenSpaceTransformationFilter implements Filter<Pair<Face, Color>, Pair<Face, Color>> {
 
     private Pipe<Pair<Face, Color>> successor;
     private final PipelineData pd;
 
-    public ScreenSpaceTransformation(PipelineData pd) {
+    public ScreenSpaceTransformationFilter(PipelineData pd) {
         this.pd = pd;
     }
 

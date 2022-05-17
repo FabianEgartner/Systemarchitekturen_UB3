@@ -18,12 +18,12 @@ public class PushPipelineFactory {
 
         // TODO: push from the source (model)
         DataSource<Model> dataSource = new DataSource<>();
-        ModelViewTransformation<Face> modelViewFilter = new ModelViewTransformation<>(pd);
-        BackfaceCulling<Face> backfaceCullingFilter = new BackfaceCulling<>();
+        ModelViewTransformationFilter<Face> modelViewFilter = new ModelViewTransformationFilter<>(pd);
+        BackfaceCullingFilter<Face> backfaceCullingFilter = new BackfaceCullingFilter<>();
         ColorFilter<Face> colorFilter = new ColorFilter<>(pd);
         LightingFilter lightingFilter = new LightingFilter(pd);
-        PerspectiveProjection perspectiveProjection = new PerspectiveProjection(pd);
-        ScreenSpaceTransformation screenSpaceTransformation = new ScreenSpaceTransformation(pd);
+        PerspectiveProjectionFilter perspectiveProjectionFilter = new PerspectiveProjectionFilter(pd);
+        ScreenSpaceTransformationFilter screenSpaceTransformationFilter = new ScreenSpaceTransformationFilter(pd);
         DataSink dataSink = new DataSink(pd);
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
@@ -54,22 +54,22 @@ public class PushPipelineFactory {
             // 5. perform projection transformation on VIEW SPACE coordinates
             Pipe<Pair<Face, Color>> lightingtoPerspectivePipe = new Pipe<>();
             lightingFilter.setPipeSuccessor(lightingtoPerspectivePipe);
-            lightingtoPerspectivePipe.setSuccessor(perspectiveProjection);
+            lightingtoPerspectivePipe.setSuccessor(perspectiveProjectionFilter);
         } else {
             // 5. perform projection transformation
             Pipe<Pair<Face, Color>> colorToPerspectivePipe = new Pipe<>();
             colorFilter.setPipeSuccessor(colorToPerspectivePipe);
-            colorToPerspectivePipe.setSuccessor(perspectiveProjection);
+            colorToPerspectivePipe.setSuccessor(perspectiveProjectionFilter);
         }
 
         // perform perspective division to screen coordinates
         Pipe<Pair<Face, Color>> toScreenSpaceTransformation = new Pipe<>();
-        perspectiveProjection.setPipeSuccessor(toScreenSpaceTransformation);
-        toScreenSpaceTransformation.setSuccessor(screenSpaceTransformation);
+        perspectiveProjectionFilter.setPipeSuccessor(toScreenSpaceTransformation);
+        toScreenSpaceTransformation.setSuccessor(screenSpaceTransformationFilter);
 
         // feed into the sink (renderer)
         Pipe<Pair<Face, Color>> toSink = new Pipe<>();
-        screenSpaceTransformation.setPipeSuccessor(toSink);
+        screenSpaceTransformationFilter.setPipeSuccessor(toSink);
         toSink.setSuccessor(dataSink);
 
         // returning an animation renderer which handles clearing of the

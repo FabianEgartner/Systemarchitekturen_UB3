@@ -5,7 +5,7 @@ import at.fhv.sysarch.lab3.pipeline.Filter;
 import at.fhv.sysarch.lab3.pipeline.Pipe;
 import com.hackoeur.jglm.Vec4;
 
-public class BackfaceCulling<I extends Face> implements Filter<I, Face> {
+public class BackfaceCullingFilter<I extends Face> implements Filter<I, Face> {
 
     private Pipe<Face> successor;
 
