@@ -12,14 +12,19 @@ public class PushPipelineFactory {
         // TODO: the connection of filters and pipes requires a lot of boilerplate code. Think about options how this can be minimized
         Filter source = new DataSource<>();
         ModelViewTransformation modelViewFilter = new ModelViewTransformation(pd);
+        BackfaceCulling backfaceCullingFilter = new BackfaceCulling();
         Filter sink = new DataSink<>(pd);
 
         Pipe pipe = new Pipe();
         source.setPipeSuccessor(pipe);
         pipe.setSuccessor(modelViewFilter);
 
+        Pipe pipe2 = new Pipe();
+        modelViewFilter.setPipeSuccessor(pipe2);
+        pipe2.setSuccessor(backfaceCullingFilter);
+
         Pipe toSink = new Pipe();
-        modelViewFilter.setPipeSuccessor(toSink);
+        backfaceCullingFilter.setPipeSuccessor(toSink);
         toSink.setSuccessor(sink);
 
         // TODO: push from the source (model)
