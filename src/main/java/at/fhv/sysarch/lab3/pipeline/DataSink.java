@@ -18,9 +18,7 @@ public class DataSink<I extends Face> implements Filter<I>{
     }
 
     @Override
-    public void write(I input) {
-
-        Face face = (Face) input;
+    public void write(I face) {
 
         if (pd.getRenderingMode().equals(RenderingMode.WIREFRAME)) {
             renderWireframe(pd.getGraphicsContext(), pd.getModelColor(), face);
@@ -33,7 +31,7 @@ public class DataSink<I extends Face> implements Filter<I>{
         }
     }
 
-    private void renderWireframe(GraphicsContext gc, Color color, Face face) {
+    private void renderWireframe(GraphicsContext gc, Color color, I face) {
         gc.setStroke(color);
 
         String fx1 = Float.toString(face.getV1().getX() * factor);
@@ -62,7 +60,7 @@ public class DataSink<I extends Face> implements Filter<I>{
         gc.strokePolygon(x, y, 3);
     }
 
-    private void renderFilled(GraphicsContext gc, Color color, Face face) {
+    private void renderFilled(GraphicsContext gc, Color color, I face) {
         gc.setFill(color);
 
         String fx1 = Float.toString(face.getV1().getX() * factor);
@@ -91,7 +89,7 @@ public class DataSink<I extends Face> implements Filter<I>{
         gc.fillPolygon(x, y, 3);
     }
 
-    private void renderPoint(GraphicsContext gc, Color color, Face face) {
+    private void renderPoint(GraphicsContext gc, Color color, I face) {
         gc.setFill(color);
 
         gc.fillOval(face.getV1().getX()*factor, face.getV1().getY()*factor, 5, 5);
