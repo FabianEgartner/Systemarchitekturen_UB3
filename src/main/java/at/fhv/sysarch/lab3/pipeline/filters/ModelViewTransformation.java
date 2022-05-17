@@ -1,16 +1,20 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.Filter;
+import at.fhv.sysarch.lab3.pipeline.Pipe;
+import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import com.hackoeur.jglm.Mat4;
 
-public class ModelViewTransformation<I extends Face> implements Filter<I> {
+public class ModelViewTransformation<I extends Face> implements Filter<I, Face> {
 
     private final PipelineData pd;
-    private Pipe successor;
+    private Pipe<Face> successor;
     private Mat4 rotationMatrix;
 
     public ModelViewTransformation(PipelineData pd) {this.pd = pd; }
 
+    @Override
     public void write(I input) {
         Face result = process(input);
 
@@ -23,6 +27,7 @@ public class ModelViewTransformation<I extends Face> implements Filter<I> {
         }
     }
 
+    @Override
     public Face process(Face face) {
 
         // compute updated model-view transformation
@@ -42,7 +47,7 @@ public class ModelViewTransformation<I extends Face> implements Filter<I> {
     }
 
     @Override
-    public void setPipeSuccessor(Pipe successor) {
+    public void setPipeSuccessor(Pipe<Face> successor) {
         this.successor = successor;
     }
 

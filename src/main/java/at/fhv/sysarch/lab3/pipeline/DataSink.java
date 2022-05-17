@@ -6,7 +6,7 @@ import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class DataSink<I extends Face> implements Filter<Pair<Face, Color>>{
+public class DataSink implements Filter<Pair<Face, Color>, Void>{
 
     private final PipelineData pd;
     private final int factor = 1;
@@ -14,8 +14,11 @@ public class DataSink<I extends Face> implements Filter<Pair<Face, Color>>{
     public DataSink(PipelineData pd) {this.pd = pd; }
 
     @Override
-    public void setPipeSuccessor(Pipe pipe) {
-        // TODO: think about how you organize your interfaces
+    public void setPipeSuccessor(Pipe<Void> pipe) {}
+
+    @Override
+    public Void process(Pair<Face, Color> input) {
+        return null;
     }
 
     @Override

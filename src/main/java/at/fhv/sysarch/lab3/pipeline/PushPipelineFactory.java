@@ -1,11 +1,15 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
+import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.pipeline.data.Pair;
+import at.fhv.sysarch.lab3.pipeline.filters.*;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Matrices;
 import com.hackoeur.jglm.Vec3;
 import javafx.animation.AnimationTimer;
+import javafx.scene.paint.Color;
 
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
@@ -13,22 +17,22 @@ public class PushPipelineFactory {
         // TODO: the connection of filters and pipes requires a lot of boilerplate code. Think about options how this can be minimized
 
         // TODO: push from the source (model)
-        Filter dataSource = new DataSource<>();
-        ModelViewTransformation modelViewFilter = new ModelViewTransformation(pd);
-        BackfaceCulling backfaceCullingFilter = new BackfaceCulling();
-        ColorFilter colorFilter = new ColorFilter<>(pd);
-        LightingFilter lightingFilter = new LightingFilter<>(pd);
-        PerspectiveProjection perspectiveProjection = new PerspectiveProjection<>(pd);
-        ScreenSpaceTransformation screenSpaceTransformation = new ScreenSpaceTransformation<>(pd);
-        Filter dataSink = new DataSink<>(pd);
+        DataSource<Model> dataSource = new DataSource<>();
+        ModelViewTransformation<Face> modelViewFilter = new ModelViewTransformation<>(pd);
+        BackfaceCulling<Face> backfaceCullingFilter = new BackfaceCulling<>();
+        ColorFilter<Face> colorFilter = new ColorFilter<>(pd);
+        LightingFilter lightingFilter = new LightingFilter(pd);
+        PerspectiveProjection perspectiveProjection = new PerspectiveProjection(pd);
+        ScreenSpaceTransformation screenSpaceTransformation = new ScreenSpaceTransformation(pd);
+        DataSink dataSink = new DataSink(pd);
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
-        Pipe toModelViewFilter = new Pipe();
+        Pipe<Face> toModelViewFilter = new Pipe<>();
         dataSource.setPipeSuccessor(toModelViewFilter);
         toModelViewFilter.setSuccessor(modelViewFilter);
 
         // TODO 2. perform backface culling in VIEW SPACE
-        Pipe toBackfaceCullingFilter = new Pipe();
+        Pipe<Face> toBackfaceCullingFilter = new Pipe<>();
         modelViewFilter.setPipeSuccessor(toBackfaceCullingFilter);
         toBackfaceCullingFilter.setSuccessor(backfaceCullingFilter);
 
@@ -36,35 +40,35 @@ public class PushPipelineFactory {
         // Not possible (without a hack) in the push pipeline
 
         // TODO 4. add coloring (space unimportant)
-        Pipe toColorFilter = new Pipe();
+        Pipe<Face> toColorFilter = new Pipe<>();
         backfaceCullingFilter.setPipeSuccessor(toColorFilter);
         toColorFilter.setSuccessor(colorFilter);
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. perform lighting in VIEW SPACE
-            Pipe toLightingFilter = new Pipe();
+            Pipe<Pair<Face, Color>> toLightingFilter = new Pipe<>();
             colorFilter.setPipeSuccessor(toLightingFilter);
             toLightingFilter.setSuccessor(lightingFilter);
 
             // 5. perform projection transformation on VIEW SPACE coordinates
-            Pipe lightingtoPerspectivePipe = new Pipe();
+            Pipe<Pair<Face, Color>> lightingtoPerspectivePipe = new Pipe<>();
             lightingFilter.setPipeSuccessor(lightingtoPerspectivePipe);
             lightingtoPerspectivePipe.setSuccessor(perspectiveProjection);
         } else {
             // 5. perform projection transformation
-            Pipe colorToPerspectivePipe = new Pipe();
+            Pipe<Pair<Face, Color>> colorToPerspectivePipe = new Pipe<>();
             colorFilter.setPipeSuccessor(colorToPerspectivePipe);
             colorToPerspectivePipe.setSuccessor(perspectiveProjection);
         }
 
         // perform perspective division to screen coordinates
-        Pipe toScreenSpaceTransformation = new Pipe();
+        Pipe<Pair<Face, Color>> toScreenSpaceTransformation = new Pipe<>();
         perspectiveProjection.setPipeSuccessor(toScreenSpaceTransformation);
         toScreenSpaceTransformation.setSuccessor(screenSpaceTransformation);
 
         // feed into the sink (renderer)
-        Pipe toSink = new Pipe();
+        Pipe<Pair<Face, Color>> toSink = new Pipe<>();
         screenSpaceTransformation.setPipeSuccessor(toSink);
         toSink.setSuccessor(dataSink);
 

@@ -3,15 +3,15 @@ package at.fhv.sysarch.lab3.pipeline;
 import at.fhv.sysarch.lab3.obj.Face;
 
 // TODO: how can pipes be used for different data types?
-public class Pipe<T> {
+public class Pipe<I> {
 
-    private Filter successor;
+    private Filter<I, ?> successor;
 
-    public void setSuccessor (Filter successor) {
+    public void setSuccessor (Filter<I, ?> successor) {
         this.successor = successor;
     }
 
-    public void write(T data) {
+    public void write(I data) {
         this.successor.write(data);
     }
 }

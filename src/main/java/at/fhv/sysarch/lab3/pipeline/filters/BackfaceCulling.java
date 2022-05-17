@@ -1,14 +1,16 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.Filter;
+import at.fhv.sysarch.lab3.pipeline.Pipe;
 import com.hackoeur.jglm.Vec4;
 
-public class BackfaceCulling<I extends Face> implements Filter<I> {
+public class BackfaceCulling<I extends Face> implements Filter<I, Face> {
 
-    private Pipe successor;
+    private Pipe<Face> successor;
 
     @Override
-    public void write(Face input) {
+    public void write(I input) {
         Face result = process(input);
 
         if (null == result) {
@@ -20,6 +22,7 @@ public class BackfaceCulling<I extends Face> implements Filter<I> {
         }
     }
 
+    @Override
     public Face process(Face face) {
         Vec4 v1 = face.getV1();
         Vec4 n1 = face.getN1();
@@ -33,7 +36,7 @@ public class BackfaceCulling<I extends Face> implements Filter<I> {
     }
 
     @Override
-    public void setPipeSuccessor(Pipe successor) {
+    public void setPipeSuccessor(Pipe<Face> successor) {
         this.successor = successor;
     }
 }

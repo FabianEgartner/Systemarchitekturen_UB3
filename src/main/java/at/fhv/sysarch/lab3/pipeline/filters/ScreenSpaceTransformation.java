@@ -1,10 +1,13 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.Filter;
+import at.fhv.sysarch.lab3.pipeline.Pipe;
+import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import javafx.scene.paint.Color;
 
-public class ScreenSpaceTransformation<I extends Face> implements Filter<Pair<Face, Color>>  {
+public class ScreenSpaceTransformation implements Filter<Pair<Face, Color>, Pair<Face, Color>> {
 
     private Pipe<Pair<Face, Color>> successor;
     private final PipelineData pd;
@@ -22,6 +25,7 @@ public class ScreenSpaceTransformation<I extends Face> implements Filter<Pair<Fa
         }
     }
 
+    @Override
     public Pair<Face, Color> process(Pair<Face, Color> input) {
         Face face = input.fst();
 
@@ -43,7 +47,7 @@ public class ScreenSpaceTransformation<I extends Face> implements Filter<Pair<Fa
     }
 
     @Override
-    public void setPipeSuccessor(Pipe successor) {
+    public void setPipeSuccessor(Pipe<Pair<Face, Color>> successor) {
         this.successor = successor;
     }
 }

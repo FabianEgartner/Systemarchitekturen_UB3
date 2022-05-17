@@ -1,11 +1,14 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.Filter;
+import at.fhv.sysarch.lab3.pipeline.Pipe;
+import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import com.hackoeur.jglm.Mat4;
 import javafx.scene.paint.Color;
 
-public class PerspectiveProjection<I extends Face> implements Filter<Pair<Face, Color>> {
+public class PerspectiveProjection implements Filter<Pair<Face, Color>, Pair<Face, Color>> {
 
     private Pipe<Pair<Face, Color>> successor;
     private final PipelineData pd;
@@ -23,6 +26,7 @@ public class PerspectiveProjection<I extends Face> implements Filter<Pair<Face, 
         }
     }
 
+    @Override
     public Pair<Face, Color> process(Pair<Face, Color> pair) {
         Mat4 projectionTransform = pd.getProjTransform();
         Face face = pair.fst();
@@ -38,7 +42,7 @@ public class PerspectiveProjection<I extends Face> implements Filter<Pair<Face, 
     }
 
     @Override
-    public void setPipeSuccessor(Pipe successor) {
+    public void setPipeSuccessor(Pipe<Pair<Face, Color>> successor) {
         this.successor = successor;
     }
 }

@@ -1,10 +1,13 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.Filter;
+import at.fhv.sysarch.lab3.pipeline.Pipe;
+import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import javafx.scene.paint.Color;
 
-public class LightingFilter<I extends Face> implements Filter<Pair<Face, Color>>{
+public class LightingFilter implements Filter<Pair<Face, Color>, Pair<Face, Color>> {
 
     private Pipe<Pair<Face, Color>> successor;
     private final PipelineData pd;
@@ -14,8 +17,9 @@ public class LightingFilter<I extends Face> implements Filter<Pair<Face, Color>>
     }
 
     @Override
-    public void write(Pair<Face, Color> input) {
-        Pair<Face, Color> result = process(input);
+    public void write(Pair<Face, Color> pair) {
+        Pair<Face, Color> result = process(pair);
+
         if (null == result) {
             return;
         }
@@ -25,8 +29,9 @@ public class LightingFilter<I extends Face> implements Filter<Pair<Face, Color>>
         }
     }
 
-    public Pair<Face, Color> process(Pair<Face, Color> input) {
-        Face face = input.fst();
+    @Override
+    public Pair<Face, Color> process(Pair<Face, Color> pair) {
+        Face face = pair.fst();
 
         float dotProduct = face.getN1().toVec3().dot(pd.getLightPos().getUnitVector());
 
@@ -34,11 +39,11 @@ public class LightingFilter<I extends Face> implements Filter<Pair<Face, Color>>
             return new Pair<>(face, Color.BLACK);
         }
 
-        return new Pair<>(face, input.snd().deriveColor(0, 1, dotProduct, 1));
+        return new Pair<>(face, pair.snd().deriveColor(0, 1, dotProduct, 1));
     }
 
     @Override
-    public void setPipeSuccessor(Pipe successor) {
+    public void setPipeSuccessor(Pipe<Pair<Face, Color>> successor) {
         this.successor = successor;
     }
 }
