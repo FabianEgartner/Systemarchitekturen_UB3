@@ -1,27 +1,24 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
-import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
-import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import javafx.animation.AnimationTimer;
-
-import java.util.List;
 
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
 
+        // TODO: the connection of filters and pipes requires a lot of boilerplate code. Think about options how this can be minimized
         Filter source = new DataSource<>();
         Filter filter = new ModelViewTransformation<>();
-        Filter sink = new DataSink<>(pd.getGraphicsContext(), pd.getRenderingMode());
+        Filter sink = new DataSink<>(pd);
 
         Pipe pipe = new Pipe();
-        pipe.setSuccessor(filter);
         source.setPipeSuccessor(pipe);
+        pipe.setSuccessor(filter);
 
         Pipe toSink = new Pipe();
-        toSink.setSuccessor(sink);
         filter.setPipeSuccessor(toSink);
+        toSink.setSuccessor(sink);
 
         // TODO: push from the source (model)
 
@@ -60,7 +57,7 @@ public class PushPipelineFactory {
             @Override
             protected void render(float fraction, Model model) {
 
-                source.write(pd.getModel());
+                source.write(model);
 
                 // render static line
 //                pd.getGraphicsContext().setStroke(Color.RED);

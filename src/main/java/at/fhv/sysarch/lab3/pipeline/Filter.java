@@ -8,5 +8,4 @@ public interface Filter<I> {
     void setPipeSuccessor(Pipe pipe);
 
     void write(I input);
-
 }

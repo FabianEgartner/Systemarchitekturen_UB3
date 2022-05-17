@@ -13,7 +13,7 @@ public class ModelViewTransformation<I extends Face> implements Filter<I> {
 
     @Override
     public void write(I input) {
-        System.out.println("ModelViewTransformation received Input");
+        // TODO: perform ModelViewTransformation
         this.successor.write(input);
     }
 }

@@ -2,6 +2,7 @@ package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.obj.Face;
 
+// TODO: how can pipes be used for different data types?
 public class Pipe {
 
     private Filter successor;
@@ -11,7 +12,6 @@ public class Pipe {
     }
 
     public void write(Face face) {
-        System.out.println("Pipe got Face");
         this.successor.write(face);
     }
 }

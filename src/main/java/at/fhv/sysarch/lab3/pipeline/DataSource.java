@@ -10,8 +10,9 @@ public class DataSource<I extends Model> implements Filter<I> {
     public void setPipeSuccessor(Pipe pipe) {this.successor = pipe; }
 
     public void write(I model) {
+
         for(Face face : model.getFaces()) {
-            System.out.println("DataSource extracted face");
+            // TODO: write face to next filter
             successor.write(face);
         }
     }
