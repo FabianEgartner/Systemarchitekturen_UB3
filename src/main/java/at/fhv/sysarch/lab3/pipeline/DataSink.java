@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 public class DataSink<I extends Face> implements Filter<Pair<Face, Color>>{
 
     private final PipelineData pd;
-    private final int factor = 100;
+    private final int factor = 1;
 
     public DataSink(PipelineData pd) {this.pd = pd; }
 

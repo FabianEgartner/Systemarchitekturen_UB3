@@ -19,6 +19,7 @@ public class PushPipelineFactory {
         ColorFilter colorFilter = new ColorFilter<>(pd);
         LightingFilter lightingFilter = new LightingFilter<>(pd);
         PerspectiveProjection perspectiveProjection = new PerspectiveProjection<>(pd);
+        ScreenSpaceTransformation screenSpaceTransformation = new ScreenSpaceTransformation<>(pd);
         Filter dataSink = new DataSink<>(pd);
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
@@ -57,11 +58,14 @@ public class PushPipelineFactory {
             colorToPerspectivePipe.setSuccessor(perspectiveProjection);
         }
 
-        // TODO 6. perform perspective division to screen coordinates
+        // perform perspective division to screen coordinates
+        Pipe toScreenSpaceTransformation = new Pipe();
+        perspectiveProjection.setPipeSuccessor(toScreenSpaceTransformation);
+        toScreenSpaceTransformation.setSuccessor(screenSpaceTransformation);
 
-        // TODO 7. feed into the sink (renderer)
+        // feed into the sink (renderer)
         Pipe toSink = new Pipe();
-        perspectiveProjection.setPipeSuccessor(toSink);
+        screenSpaceTransformation.setPipeSuccessor(toSink);
         toSink.setSuccessor(dataSink);
 
         // returning an animation renderer which handles clearing of the
@@ -94,92 +98,6 @@ public class PushPipelineFactory {
 
                 // trigger rendering of the pipeline
                 dataSource.write(model);
-
-                // render static line
-//                pd.getGraphicsContext().setStroke(Color.RED);
-//                pd.getGraphicsContext().strokeLine(150,150,250,250);
-
-                // render single face of model
-//                pd.getGraphicsContext().setStroke(Color.YELLOW);
-//                Face face = model.getFaces().get(0);
-//                pd.getGraphicsContext().strokeLine(face.getV1().getX(), face.getV1().getY(), face.getV2().getX(), face.getV2().getY());
-/*
-                List<Face> faces = model.getFaces();
-                final int GROW = 100;
-
-                // render wireframes
-                if (pd.getRenderingMode().equals(RenderingMode.WIREFRAME)) {
-                    pd.getGraphicsContext().setStroke(pd.getModelColor());
-
-                    for (Face face : faces) {
-                        String fx1 = Float.toString(face.getV1().getX() * GROW);
-                        double dx1 = Double.parseDouble(fx1);
-
-                        String fx2 = Float.toString(face.getV2().getX() * GROW);
-                        double dx2 = Double.parseDouble(fx2);
-
-                        String fx3 = Float.toString(face.getV3().getX() * GROW);
-                        double dx3 = Double.parseDouble(fx3);
-
-                        double[] x = {dx1, dx2, dx3};
-
-
-                        String fy1 = Float.toString(face.getV1().getY() * GROW);
-                        double dy1 = Double.parseDouble(fy1);
-
-                        String fy2 = Float.toString(face.getV2().getY() * GROW);
-                        double dy2 = Double.parseDouble(fy2);
-
-                        String fy3 = Float.toString(face.getV3().getY() * GROW);
-                        double dy3 = Double.parseDouble(fy3);
-
-                        double[] y = {dy1, dy2, dy3};
-
-                        pd.getGraphicsContext().strokePolygon(x, y, 3);
-                    }
-                }
-
-                // render filled
-                else if (pd.getRenderingMode().equals(RenderingMode.FILLED)) {
-                    pd.getGraphicsContext().setFill(pd.getModelColor());
-
-                    for (Face face : faces) {
-                        String fx1 = Float.toString(face.getV1().getX() * GROW);
-                        double dx1 = Double.parseDouble(fx1);
-
-                        String fx2 = Float.toString(face.getV2().getX() * GROW);
-                        double dx2 = Double.parseDouble(fx2);
-
-                        String fx3 = Float.toString(face.getV3().getX() * GROW);
-                        double dx3 = Double.parseDouble(fx3);
-
-                        double[] x = {dx1, dx2, dx3};
-
-
-                        String fy1 = Float.toString(face.getV1().getY() * GROW);
-                        double dy1 = Double.parseDouble(fy1);
-
-                        String fy2 = Float.toString(face.getV2().getY() * GROW);
-                        double dy2 = Double.parseDouble(fy2);
-
-                        String fy3 = Float.toString(face.getV3().getY() * GROW);
-                        double dy3 = Double.parseDouble(fy3);
-
-                        double[] y = {dy1, dy2, dy3};
-
-                        pd.getGraphicsContext().fillPolygon(x, y, 3);
-                    }
-                }
-
-                // render points
-                else {
-                    pd.getGraphicsContext().setStroke(pd.getModelColor());
-
-                    for (Face face : faces) {
-                        pd.getGraphicsContext().strokeLine(face.getV1().getX() * GROW, face.getV1().getY() * GROW, face.getV2().getX() * GROW, face.getV2().getY() * GROW);
-                    }
-                }
-*/
             }
         };
     }
