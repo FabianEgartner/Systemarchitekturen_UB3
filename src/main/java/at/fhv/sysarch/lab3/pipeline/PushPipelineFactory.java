@@ -2,6 +2,8 @@ package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Model;
+import com.hackoeur.jglm.Mat4;
+import com.hackoeur.jglm.Matrices;
 import javafx.animation.AnimationTimer;
 
 public class PushPipelineFactory {
@@ -9,15 +11,15 @@ public class PushPipelineFactory {
 
         // TODO: the connection of filters and pipes requires a lot of boilerplate code. Think about options how this can be minimized
         Filter source = new DataSource<>();
-        Filter filter = new ModelViewTransformation<>();
+        ModelViewTransformation modelViewFilter = new ModelViewTransformation(pd);
         Filter sink = new DataSink<>(pd);
 
         Pipe pipe = new Pipe();
         source.setPipeSuccessor(pipe);
-        pipe.setSuccessor(filter);
+        pipe.setSuccessor(modelViewFilter);
 
         Pipe toSink = new Pipe();
-        filter.setPipeSuccessor(toSink);
+        modelViewFilter.setPipeSuccessor(toSink);
         toSink.setSuccessor(sink);
 
         // TODO: push from the source (model)
@@ -48,6 +50,7 @@ public class PushPipelineFactory {
         return new AnimationRenderer(pd) {
 
             // TODO rotation variable goes in here
+            float rotation = 0f;
 
             /** This method is called for every frame from the JavaFX Animation
              * system (using an AnimationTimer, see AnimationRenderer). 
@@ -56,6 +59,18 @@ public class PushPipelineFactory {
              */
             @Override
             protected void render(float fraction, Model model) {
+                // compute rotation in radians
+                rotation += fraction;
+                double radiant = rotation % (2 * Math.PI); // 2 PI = 360°
+
+                // create new model rotation matrix using pd.modelRotAxis
+                Mat4 rotationMatrix = Matrices.rotate(
+                        (float) radiant,
+                        pd.getModelRotAxis() // Rotation axis is a Vec3 with y=1 and x/z=0
+                );
+
+                // update model-view filter
+                modelViewFilter.setRotationMatrix(rotationMatrix);
 
                 source.write(model);
 
