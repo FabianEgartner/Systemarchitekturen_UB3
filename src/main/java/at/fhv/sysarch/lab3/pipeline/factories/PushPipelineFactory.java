@@ -16,24 +16,17 @@ import javafx.scene.paint.Color;
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
 
-        // TODO: the connection of filters and pipes requires a lot of boilerplate code. Think about options how this can be minimized
-
         // TODO: push from the source (model)
         DataSource<Model> dataSource = new DataSource<>();
-        ModelViewTransformationFilter<Face> modelViewFilter = new ModelViewTransformationFilter<>(pd);
-        BackfaceCullingFilter<Face> backfaceCullingFilter = new BackfaceCullingFilter<>();
-        ColorFilter<Face> colorFilter = new ColorFilter<>(pd);
-        LightingFilter lightingFilter = new LightingFilter(pd);
-        PerspectiveProjectionFilter perspectiveProjectionFilter = new PerspectiveProjectionFilter(pd);
-        ScreenSpaceTransformationFilter screenSpaceTransformationFilter = new ScreenSpaceTransformationFilter(pd);
-        DataSink dataSink = new DataSink(pd);
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
+        ModelViewTransformationFilter<Face> modelViewFilter = new ModelViewTransformationFilter<>(pd);
         Pipe<Face> toModelViewFilter = new Pipe<>();
         dataSource.setPipeSuccessor(toModelViewFilter);
         toModelViewFilter.setSuccessor(modelViewFilter);
 
         // TODO 2. perform backface culling in VIEW SPACE
+        BackfaceCullingFilter<Face> backfaceCullingFilter = new BackfaceCullingFilter<>();
         Pipe<Face> toBackfaceCullingFilter = new Pipe<>();
         modelViewFilter.setPipeSuccessor(toBackfaceCullingFilter);
         toBackfaceCullingFilter.setSuccessor(backfaceCullingFilter);
@@ -42,13 +35,18 @@ public class PushPipelineFactory {
         // Not possible (without a hack) in the push pipeline
 
         // TODO 4. add coloring (space unimportant)
+        ColorFilter<Face> colorFilter = new ColorFilter<>(pd);
         Pipe<Face> toColorFilter = new Pipe<>();
         backfaceCullingFilter.setPipeSuccessor(toColorFilter);
         toColorFilter.setSuccessor(colorFilter);
 
         // lighting can be switched on/off
+        PerspectiveProjectionFilter perspectiveProjectionFilter = new PerspectiveProjectionFilter(pd);
+
         if (pd.isPerformLighting()) {
             // 4a. perform lighting in VIEW SPACE
+            LightingFilter lightingFilter = new LightingFilter(pd);
+
             Pipe<Pair<Face, Color>> toLightingFilter = new Pipe<>();
             colorFilter.setPipeSuccessor(toLightingFilter);
             toLightingFilter.setSuccessor(lightingFilter);
@@ -65,11 +63,13 @@ public class PushPipelineFactory {
         }
 
         // perform perspective division to screen coordinates
+        ScreenSpaceTransformationFilter screenSpaceTransformationFilter = new ScreenSpaceTransformationFilter(pd);
         Pipe<Pair<Face, Color>> toScreenSpaceTransformation = new Pipe<>();
         perspectiveProjectionFilter.setPipeSuccessor(toScreenSpaceTransformation);
         toScreenSpaceTransformation.setSuccessor(screenSpaceTransformationFilter);
 
         // feed into the sink (renderer)
+        DataSink dataSink = new DataSink(pd);
         Pipe<Pair<Face, Color>> toSink = new Pipe<>();
         screenSpaceTransformationFilter.setPipeSuccessor(toSink);
         toSink.setSuccessor(dataSink);
