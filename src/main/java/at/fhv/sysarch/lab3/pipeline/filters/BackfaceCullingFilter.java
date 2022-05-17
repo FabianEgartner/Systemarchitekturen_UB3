@@ -1,8 +1,8 @@
 package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.Filter;
-import at.fhv.sysarch.lab3.pipeline.Pipe;
+import at.fhv.sysarch.lab3.pipeline.api.Filter;
+import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
 import com.hackoeur.jglm.Vec4;
 
 public class BackfaceCullingFilter<I extends Face> implements Filter<I, Face> {

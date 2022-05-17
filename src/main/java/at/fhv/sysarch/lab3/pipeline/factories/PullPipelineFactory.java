@@ -1,7 +1,8 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.factories;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
 import javafx.animation.AnimationTimer;
 
 public class PullPipelineFactory {

@@ -1,14 +1,10 @@
 package at.fhv.sysarch.lab3;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Optional;
-
 import at.fhv.sysarch.lab3.obj.Model;
 import at.fhv.sysarch.lab3.obj.ObjLoader;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
-import at.fhv.sysarch.lab3.pipeline.PullPipelineFactory;
-import at.fhv.sysarch.lab3.pipeline.PushPipelineFactory;
+import at.fhv.sysarch.lab3.pipeline.factories.PullPipelineFactory;
+import at.fhv.sysarch.lab3.pipeline.factories.PushPipelineFactory;
+import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
 import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -18,6 +14,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Optional;
 
 public class Main extends Application {
 //    private final static int VIEW_WIDTH  = 860;

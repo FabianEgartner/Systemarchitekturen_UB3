@@ -1,10 +1,10 @@
 package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.Filter;
-import at.fhv.sysarch.lab3.pipeline.Pipe;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
-import at.fhv.sysarch.lab3.pipeline.data.Pair;
+import at.fhv.sysarch.lab3.pipeline.api.Filter;
+import at.fhv.sysarch.lab3.pipeline.obj.Pair;
+import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
+import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
 import javafx.scene.paint.Color;
 
 public class LightingFilter implements Filter<Pair<Face, Color>, Pair<Face, Color>> {

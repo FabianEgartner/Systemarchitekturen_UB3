@@ -1,7 +1,7 @@
 package at.fhv.sysarch.lab3.animation;
 
 import at.fhv.sysarch.lab3.obj.Model;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
+import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 

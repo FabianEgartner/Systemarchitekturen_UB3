@@ -1,10 +1,12 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.factories;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
-import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.filters.*;
+import at.fhv.sysarch.lab3.pipeline.obj.Pair;
+import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
+import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Matrices;
 import com.hackoeur.jglm.Vec3;

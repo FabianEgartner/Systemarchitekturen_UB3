@@ -1,4 +1,4 @@
-package at.fhv.sysarch.lab3.pipeline.data;
+package at.fhv.sysarch.lab3.pipeline.obj;
 
 public class Pair<T1, T2> {
     private T1 fst;
