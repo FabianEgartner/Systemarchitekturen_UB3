@@ -1,6 +1,7 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import com.hackoeur.jglm.Vec4;
 
 public class BackfaceCulling<I extends Face> implements Filter<I> {
 
@@ -20,9 +21,15 @@ public class BackfaceCulling<I extends Face> implements Filter<I> {
     }
 
     public Face process(Face face) {
-        if (face.getV1().dot(face.getN1()) > 0) {
+
+        Vec4 v1 = face.getV1();
+        Vec4 n1 = face.getN1();
+        float dotProduct = v1.dot(n1);
+
+        if (dotProduct > 0) {
             return null;
         }
+
         return face;
     }
 
