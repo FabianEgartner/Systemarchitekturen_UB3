@@ -34,27 +34,14 @@ public class DataSink<I extends Face> implements Filter<I>{
     private void renderWireframe(GraphicsContext gc, Color color, I face) {
         gc.setStroke(color);
 
-        String fx1 = Float.toString(face.getV1().getX() * factor);
-        double dx1 = Double.parseDouble(fx1);
-
-        String fx2 = Float.toString(face.getV2().getX() * factor);
-        double dx2 = Double.parseDouble(fx2);
-
-        String fx3 = Float.toString(face.getV3().getX() * factor);
-        double dx3 = Double.parseDouble(fx3);
-
+        double dx1 = face.getV1().getX() * factor;
+        double dx2 = face.getV2().getX() * factor;
+        double dx3 = face.getV3().getX() * factor;
         double[] x = {dx1, dx2, dx3};
 
-
-        String fy1 = Float.toString(face.getV1().getY() * factor);
-        double dy1 = Double.parseDouble(fy1);
-
-        String fy2 = Float.toString(face.getV2().getY() * factor);
-        double dy2 = Double.parseDouble(fy2);
-
-        String fy3 = Float.toString(face.getV3().getY() * factor);
-        double dy3 = Double.parseDouble(fy3);
-
+        double dy1 = face.getV1().getY() * factor;
+        double dy2 = face.getV2().getY() * factor;
+        double dy3 = face.getV3().getY() * factor;
         double[] y = {dy1, dy2, dy3};
 
         gc.strokePolygon(x, y, 3);
@@ -63,27 +50,14 @@ public class DataSink<I extends Face> implements Filter<I>{
     private void renderFilled(GraphicsContext gc, Color color, I face) {
         gc.setFill(color);
 
-        String fx1 = Float.toString(face.getV1().getX() * factor);
-        double dx1 = Double.parseDouble(fx1);
-
-        String fx2 = Float.toString(face.getV2().getX() * factor);
-        double dx2 = Double.parseDouble(fx2);
-
-        String fx3 = Float.toString(face.getV3().getX() * factor);
-        double dx3 = Double.parseDouble(fx3);
-
+        double dx1 = face.getV1().getX() * factor;
+        double dx2 = face.getV2().getX() * factor;
+        double dx3 = face.getV3().getX() * factor;
         double[] x = {dx1, dx2, dx3};
 
-
-        String fy1 = Float.toString(face.getV1().getY() * factor);
-        double dy1 = Double.parseDouble(fy1);
-
-        String fy2 = Float.toString(face.getV2().getY() * factor);
-        double dy2 = Double.parseDouble(fy2);
-
-        String fy3 = Float.toString(face.getV3().getY() * factor);
-        double dy3 = Double.parseDouble(fy3);
-
+        double dy1 = face.getV1().getY() * factor;
+        double dy2 = face.getV2().getY() * factor;
+        double dy3 = face.getV3().getY() * factor;
         double[] y = {dy1, dy2, dy3};
 
         gc.fillPolygon(x, y, 3);
@@ -91,7 +65,6 @@ public class DataSink<I extends Face> implements Filter<I>{
 
     private void renderPoint(GraphicsContext gc, Color color, I face) {
         gc.setFill(color);
-
-        gc.fillOval(face.getV1().getX()*factor, face.getV1().getY()*factor, 5, 5);
+        gc.fillOval(face.getV1().getX()*factor, face.getV1().getY()*factor, 3, 3);
     }
 }

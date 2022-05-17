@@ -4,34 +4,33 @@ import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Model;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Matrices;
+import com.hackoeur.jglm.Vec3;
 import javafx.animation.AnimationTimer;
 
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
 
         // TODO: the connection of filters and pipes requires a lot of boilerplate code. Think about options how this can be minimized
-        Filter source = new DataSource<>();
+
+        // TODO: push from the source (model)
+        Filter dataSource = new DataSource<>();
         ModelViewTransformation modelViewFilter = new ModelViewTransformation(pd);
         BackfaceCulling backfaceCullingFilter = new BackfaceCulling();
-        Filter sink = new DataSink<>(pd);
+        Filter dataSink = new DataSink<>(pd);
 
-        Pipe pipe = new Pipe();
-        source.setPipeSuccessor(pipe);
-        pipe.setSuccessor(modelViewFilter);
+        // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
+        Pipe toModelViewFilter = new Pipe();
+        dataSource.setPipeSuccessor(toModelViewFilter);
+        toModelViewFilter.setSuccessor(modelViewFilter);
 
-        Pipe pipe2 = new Pipe();
-        modelViewFilter.setPipeSuccessor(pipe2);
-        pipe2.setSuccessor(backfaceCullingFilter);
+        // TODO 2. perform backface culling in VIEW SPACE
+        Pipe toBackfaceCullingFilter = new Pipe();
+        modelViewFilter.setPipeSuccessor(toBackfaceCullingFilter);
+        toBackfaceCullingFilter.setSuccessor(backfaceCullingFilter);
 
         Pipe toSink = new Pipe();
         backfaceCullingFilter.setPipeSuccessor(toSink);
-        toSink.setSuccessor(sink);
-
-        // TODO: push from the source (model)
-
-        // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
-
-        // TODO 2. perform backface culling in VIEW SPACE
+        toSink.setSuccessor(dataSink);
 
         // TODO 3. perform depth sorting in VIEW SPACE
 
@@ -54,7 +53,7 @@ public class PushPipelineFactory {
         // viewport and computation of the praction
         return new AnimationRenderer(pd) {
 
-            // TODO rotation variable goes in here
+            // rotation variable goes in here
             float rotation = 0f;
 
             /** This method is called for every frame from the JavaFX Animation
@@ -64,20 +63,22 @@ public class PushPipelineFactory {
              */
             @Override
             protected void render(float fraction, Model model) {
+
                 // compute rotation in radians
                 rotation += fraction;
                 double radiant = rotation % (2 * Math.PI); // 2 PI = 360°
 
                 // create new model rotation matrix using pd.modelRotAxis
-                Mat4 rotationMatrix = Matrices.rotate(
-                        (float) radiant,
-                        pd.getModelRotAxis() // Rotation axis is a Vec3 with y=1 and x/z=0
-                );
+                Vec3 modelRotAxis = pd.getModelRotAxis();
+
+                // compute updated model-view tranformation
+                Mat4 rotationMatrix = Matrices.rotate((float) radiant, modelRotAxis);
 
                 // update model-view filter
                 modelViewFilter.setRotationMatrix(rotationMatrix);
 
-                source.write(model);
+                // trigger rendering of the pipeline
+                dataSource.write(model);
 
                 // render static line
 //                pd.getGraphicsContext().setStroke(Color.RED);
@@ -164,15 +165,6 @@ public class PushPipelineFactory {
                     }
                 }
 */
-                // TODO compute rotation in radians
-
-                // TODO create new model rotation matrix using pd.modelRotAxis
-
-                // TODO compute updated model-view tranformation
-
-                // TODO update model-view filter
-
-                // TODO trigger rendering of the pipeline
             }
         };
     }
