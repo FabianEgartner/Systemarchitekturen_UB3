@@ -16,6 +16,7 @@ public class PushPipelineFactory {
         Filter dataSource = new DataSource<>();
         ModelViewTransformation modelViewFilter = new ModelViewTransformation(pd);
         BackfaceCulling backfaceCullingFilter = new BackfaceCulling();
+        ColorFilter colorFilter = new ColorFilter<>(pd);
         Filter dataSink = new DataSink<>(pd);
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
@@ -28,13 +29,13 @@ public class PushPipelineFactory {
         modelViewFilter.setPipeSuccessor(toBackfaceCullingFilter);
         toBackfaceCullingFilter.setSuccessor(backfaceCullingFilter);
 
-        Pipe toSink = new Pipe();
-        backfaceCullingFilter.setPipeSuccessor(toSink);
-        toSink.setSuccessor(dataSink);
-
         // TODO 3. perform depth sorting in VIEW SPACE
+        // Not possible (without a hack) in the push pipeline
 
         // TODO 4. add coloring (space unimportant)
+        Pipe toColorFilter = new Pipe();
+        backfaceCullingFilter.setPipeSuccessor(toColorFilter);
+        toColorFilter.setSuccessor(colorFilter);
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
@@ -48,6 +49,9 @@ public class PushPipelineFactory {
         // TODO 6. perform perspective division to screen coordinates
 
         // TODO 7. feed into the sink (renderer)
+        Pipe toSink = new Pipe();
+        colorFilter.setPipeSuccessor(toSink);
+        toSink.setSuccessor(dataSink);
 
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction

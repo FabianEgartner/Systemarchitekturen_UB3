@@ -1,11 +1,12 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class DataSink<I extends Face> implements Filter<I>{
+public class DataSink<I extends Face> implements Filter<Pair<Face, Color>>{
 
     private final PipelineData pd;
     private final int factor = 100;
@@ -18,20 +19,23 @@ public class DataSink<I extends Face> implements Filter<I>{
     }
 
     @Override
-    public void write(I face) {
+    public void write(Pair<Face, Color> pair) {
 
         if (pd.getRenderingMode().equals(RenderingMode.WIREFRAME)) {
-            renderWireframe(pd.getGraphicsContext(), pd.getModelColor(), face);
+            renderWireframe(pd.getGraphicsContext(), pair);
         }
         else if (pd.getRenderingMode().equals(RenderingMode.FILLED)) {
-            renderFilled(pd.getGraphicsContext(), pd.getModelColor(), face);
+            renderFilled(pd.getGraphicsContext(), pair);
         }
         else {
-            renderPoint(pd.getGraphicsContext(), pd.getModelColor(), face);
+            renderPoint(pd.getGraphicsContext(), pair);
         }
     }
 
-    private void renderWireframe(GraphicsContext gc, Color color, I face) {
+    private void renderWireframe(GraphicsContext gc, Pair<Face, Color> pair) {
+        Face face = pair.fst();
+        Color color = pair.snd();
+
         gc.setStroke(color);
 
         double dx1 = face.getV1().getX() * factor;
@@ -47,7 +51,10 @@ public class DataSink<I extends Face> implements Filter<I>{
         gc.strokePolygon(x, y, 3);
     }
 
-    private void renderFilled(GraphicsContext gc, Color color, I face) {
+    private void renderFilled(GraphicsContext gc, Pair<Face, Color> pair) {
+        Face face = pair.fst();
+        Color color = pair.snd();
+
         gc.setFill(color);
 
         double dx1 = face.getV1().getX() * factor;
@@ -63,8 +70,12 @@ public class DataSink<I extends Face> implements Filter<I>{
         gc.fillPolygon(x, y, 3);
     }
 
-    private void renderPoint(GraphicsContext gc, Color color, I face) {
+    private void renderPoint(GraphicsContext gc, Pair<Face, Color> pair) {
+        Face face = pair.fst();
+        Color color = pair.snd();
+
         gc.setFill(color);
+
         gc.fillOval(face.getV1().getX()*factor, face.getV1().getY()*factor, 3, 3);
     }
 }
