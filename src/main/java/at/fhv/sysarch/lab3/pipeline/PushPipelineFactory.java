@@ -17,6 +17,7 @@ public class PushPipelineFactory {
         ModelViewTransformation modelViewFilter = new ModelViewTransformation(pd);
         BackfaceCulling backfaceCullingFilter = new BackfaceCulling();
         ColorFilter colorFilter = new ColorFilter<>(pd);
+        LightingFilter lightingFilter = new LightingFilter<>(pd);
         Filter dataSink = new DataSink<>(pd);
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
@@ -38,19 +39,23 @@ public class PushPipelineFactory {
         toColorFilter.setSuccessor(colorFilter);
 
         // lighting can be switched on/off
-        if (pd.isPerformLighting()) {
+//        if (pd.isPerformLighting()) {
+            Pipe toLightingFilter = new Pipe();
+            colorFilter.setPipeSuccessor(toLightingFilter);
+            toLightingFilter.setSuccessor(lightingFilter);
+
             // 4a. TODO perform lighting in VIEW SPACE
 
             // 5. TODO perform projection transformation on VIEW SPACE coordinates
-        } else {
+//        } else {
             // 5. TODO perform projection transformation
-        }
+//        }
 
         // TODO 6. perform perspective division to screen coordinates
 
         // TODO 7. feed into the sink (renderer)
         Pipe toSink = new Pipe();
-        colorFilter.setPipeSuccessor(toSink);
+        lightingFilter.setPipeSuccessor(toSink);
         toSink.setSuccessor(dataSink);
 
         // returning an animation renderer which handles clearing of the

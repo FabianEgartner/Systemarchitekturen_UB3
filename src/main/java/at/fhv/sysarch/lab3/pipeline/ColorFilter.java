@@ -7,15 +7,15 @@ import javafx.scene.paint.Color;
 public class ColorFilter<I extends Face> implements Filter<I> {
 
     private Pipe<Pair<Face, Color>> successor;
-    private final PipelineData pipelineData;
+    private final PipelineData pd;
 
-    public ColorFilter(PipelineData pipelineData) {
-        this.pipelineData = pipelineData;
+    public ColorFilter(PipelineData pd) {
+        this.pd = pd;
     }
 
     @Override
     public void write(Face face) {
-        this.successor.write(new Pair<>(face, pipelineData.getModelColor()));
+        this.successor.write(new Pair<>(face, pd.getModelColor()));
     }
 
     @Override
