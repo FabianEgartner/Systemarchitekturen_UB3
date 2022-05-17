@@ -21,7 +21,6 @@ public class BackfaceCulling<I extends Face> implements Filter<I> {
     }
 
     public Face process(Face face) {
-
         Vec4 v1 = face.getV1();
         Vec4 n1 = face.getN1();
         float dotProduct = v1.dot(n1);
