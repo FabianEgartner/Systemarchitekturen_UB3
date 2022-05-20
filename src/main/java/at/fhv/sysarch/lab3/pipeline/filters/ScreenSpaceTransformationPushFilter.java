@@ -1,19 +1,35 @@
 package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.api.PullFilter;
 import at.fhv.sysarch.lab3.pipeline.api.PushFilter;
 import at.fhv.sysarch.lab3.pipeline.obj.Pair;
 import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
 import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
+import at.fhv.sysarch.lab3.pipeline.utils.PipeLineUtils;
 import javafx.scene.paint.Color;
 
-public class ScreenSpaceTransformationPushFilter implements PushFilter<Pair<Face, Color>, Pair<Face, Color>> {
+public class ScreenSpaceTransformationPushFilter implements PullFilter<Pair<Face, Color>, Pair<Face, Color>>, PushFilter<Pair<Face, Color>, Pair<Face, Color>> {
 
+    private Pipe<Pair<Face, Color>> predecessor;
     private Pipe<Pair<Face, Color>> successor;
     private final PipelineData pd;
 
     public ScreenSpaceTransformationPushFilter(PipelineData pd) {
         this.pd = pd;
+    }
+
+    @Override
+    public Pair<Face, Color> read() {
+        Pair<Face, Color> input = predecessor.read();
+
+        if (null == input) {
+            return null;
+        } else if (PipeLineUtils.isFaceMakingEnd(input.fst())) {
+            return input;
+        }
+
+        return process(input);
     }
 
     @Override
@@ -44,6 +60,11 @@ public class ScreenSpaceTransformationPushFilter implements PushFilter<Pair<Face
         );
 
         return new Pair<>(transformedFace, input.snd());
+    }
+
+    @Override
+    public void setPipePredecessor(Pipe<Pair<Face, Color>> predecessor) {
+        this.predecessor = predecessor;
     }
 
     @Override
