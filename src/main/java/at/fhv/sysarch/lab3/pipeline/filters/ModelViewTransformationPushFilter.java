@@ -1,21 +1,37 @@
 package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.api.PullFilter;
 import at.fhv.sysarch.lab3.pipeline.api.PushFilter;
 import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
 import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
+import at.fhv.sysarch.lab3.pipeline.utils.PipeLineUtils;
 import com.hackoeur.jglm.Mat4;
 
-public class ModelViewTransformationPushFilter<I extends Face> implements PushFilter<I, Face> {
+public class ModelViewTransformationPushFilter implements PullFilter<Face, Face>, PushFilter<Face, Face> {
 
-    private final PipelineData pd;
+    private Pipe<Face> predecessor;
     private Pipe<Face> successor;
+    private final PipelineData pd;
     private Mat4 rotationMatrix;
 
     public ModelViewTransformationPushFilter(PipelineData pd) {this.pd = pd; }
 
     @Override
-    public void write(I input) {
+    public Face read() {
+        Face input = predecessor.read();
+
+        if (null == input) {
+            return null;
+        } else if (PipeLineUtils.isFaceMakingEnd(input)) {
+            return input;
+        }
+
+        return process(input);
+    }
+
+    @Override
+    public void write(Face input) {
         Face result = process(input);
 
         if (null == result) {
@@ -29,7 +45,6 @@ public class ModelViewTransformationPushFilter<I extends Face> implements PushFi
 
     @Override
     public Face process(Face face) {
-
         // compute updated model-view transformation
         Mat4 modelTranslation = pd.getModelTranslation();
         Mat4 viewTransformation = pd.getViewTransform();
@@ -44,6 +59,11 @@ public class ModelViewTransformationPushFilter<I extends Face> implements PushFi
                 updatedTransformation.multiply(face.getN2()),
                 updatedTransformation.multiply(face.getN3())
         );
+    }
+
+    @Override
+    public void setPipePredecessor(Pipe<Face> predecessor) {
+        this.predecessor = predecessor;
     }
 
     @Override
