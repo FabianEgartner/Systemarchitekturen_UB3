@@ -20,7 +20,7 @@ public class PushPipelineFactory {
         DataSource<Model> dataSource = new DataSource<>();
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
-        ModelViewTransformationPushFilter<Face> modelViewFilter = new ModelViewTransformationPushFilter<>(pd);
+        ModelViewTransformationFilter modelViewFilter = new ModelViewTransformationFilter(pd);
         Pipe<Face> toModelViewFilter = new Pipe<>();
         dataSource.setPipeSuccessor(toModelViewFilter);
         toModelViewFilter.setSuccessor(modelViewFilter);
@@ -35,7 +35,7 @@ public class PushPipelineFactory {
         // Not possible (without a hack) in the push pipeline
 
         // TODO 4. add coloring (space unimportant)
-        ColorFilter<Face> colorFilter = new ColorFilter<>(pd);
+        ColorFilter colorFilter = new ColorFilter(pd);
         Pipe<Face> toColorFilter = new Pipe<>();
         backfaceCullingFilter.setPipeSuccessor(toColorFilter);
         toColorFilter.setSuccessor(colorFilter);

@@ -8,14 +8,14 @@ import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.utils.PipeLineUtils;
 import com.hackoeur.jglm.Mat4;
 
-public class ModelViewTransformationPushFilter implements PullFilter<Face, Face>, PushFilter<Face, Face> {
+public class ModelViewTransformationFilter implements PullFilter<Face, Face>, PushFilter<Face, Face> {
 
     private Pipe<Face> predecessor;
     private Pipe<Face> successor;
     private final PipelineData pd;
     private Mat4 rotationMatrix;
 
-    public ModelViewTransformationPushFilter(PipelineData pd) {this.pd = pd; }
+    public ModelViewTransformationFilter(PipelineData pd) {this.pd = pd; }
 
     @Override
     public Face read() {
