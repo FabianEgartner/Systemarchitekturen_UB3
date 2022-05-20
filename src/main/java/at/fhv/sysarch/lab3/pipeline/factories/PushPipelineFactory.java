@@ -26,7 +26,7 @@ public class PushPipelineFactory {
         toModelViewFilter.setSuccessor(modelViewFilter);
 
         // TODO 2. perform backface culling in VIEW SPACE
-        BackfaceCullingPushFilter backfaceCullingFilter = new BackfaceCullingPushFilter();
+        BackfaceCullingFilter backfaceCullingFilter = new BackfaceCullingFilter();
         Pipe<Face> toBackfaceCullingFilter = new Pipe<>();
         modelViewFilter.setPipeSuccessor(toBackfaceCullingFilter);
         toBackfaceCullingFilter.setSuccessor(backfaceCullingFilter);
@@ -35,7 +35,7 @@ public class PushPipelineFactory {
         // Not possible (without a hack) in the push pipeline
 
         // TODO 4. add coloring (space unimportant)
-        ColorPushFilter<Face> colorFilter = new ColorPushFilter<>(pd);
+        ColorFilter<Face> colorFilter = new ColorFilter<>(pd);
         Pipe<Face> toColorFilter = new Pipe<>();
         backfaceCullingFilter.setPipeSuccessor(toColorFilter);
         toColorFilter.setSuccessor(colorFilter);
