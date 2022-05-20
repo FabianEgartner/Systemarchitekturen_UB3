@@ -1,18 +1,18 @@
 package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.api.Filter;
+import at.fhv.sysarch.lab3.pipeline.api.PushFilter;
 import at.fhv.sysarch.lab3.pipeline.obj.Pair;
 import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
 import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
 import javafx.scene.paint.Color;
 
-public class ScreenSpaceTransformationFilter implements Filter<Pair<Face, Color>, Pair<Face, Color>> {
+public class ScreenSpaceTransformationPushFilter implements PushFilter<Pair<Face, Color>, Pair<Face, Color>> {
 
     private Pipe<Pair<Face, Color>> successor;
     private final PipelineData pd;
 
-    public ScreenSpaceTransformationFilter(PipelineData pd) {
+    public ScreenSpaceTransformationPushFilter(PipelineData pd) {
         this.pd = pd;
     }
 

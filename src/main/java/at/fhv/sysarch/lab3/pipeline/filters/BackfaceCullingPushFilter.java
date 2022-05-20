@@ -1,31 +1,32 @@
 package at.fhv.sysarch.lab3.pipeline.filters;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.api.Filter;
+import at.fhv.sysarch.lab3.pipeline.api.PullFilter;
+import at.fhv.sysarch.lab3.pipeline.api.PushFilter;
 import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
 import at.fhv.sysarch.lab3.pipeline.utils.PipeLineUtils;
 import com.hackoeur.jglm.Vec4;
 
-public class BackfaceCullingFilter<I extends Face> implements Filter<I, Face> {
+public class BackfaceCullingPushFilter implements PullFilter<Face, Face>, PushFilter<Face, Face> {
 
     private Pipe<Face> predecessor;
     private Pipe<Face> successor;
 
     @Override
-    public I read() {
+    public Face read() {
         Face input = predecessor.read();
 
         if (null == input) {
             return null;
         } else if (PipeLineUtils.isFaceMakingEnd(input)) {
-            return (I) input;
+            return input;
         }
 
-        return (I) process(input);
+        return process(input);
     }
 
     @Override
-    public void write(I input) {
+    public void write(Face input) {
         Face result = process(input);
 
         if (null == result) {

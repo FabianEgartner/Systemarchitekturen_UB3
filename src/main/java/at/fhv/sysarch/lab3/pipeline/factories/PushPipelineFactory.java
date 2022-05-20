@@ -20,13 +20,13 @@ public class PushPipelineFactory {
         DataSource<Model> dataSource = new DataSource<>();
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
-        ModelViewTransformationFilter<Face> modelViewFilter = new ModelViewTransformationFilter<>(pd);
+        ModelViewTransformationPushFilter<Face> modelViewFilter = new ModelViewTransformationPushFilter<>(pd);
         Pipe<Face> toModelViewFilter = new Pipe<>();
         dataSource.setPipeSuccessor(toModelViewFilter);
         toModelViewFilter.setSuccessor(modelViewFilter);
 
         // TODO 2. perform backface culling in VIEW SPACE
-        BackfaceCullingFilter<Face> backfaceCullingFilter = new BackfaceCullingFilter<>();
+        BackfaceCullingPushFilter backfaceCullingFilter = new BackfaceCullingPushFilter();
         Pipe<Face> toBackfaceCullingFilter = new Pipe<>();
         modelViewFilter.setPipeSuccessor(toBackfaceCullingFilter);
         toBackfaceCullingFilter.setSuccessor(backfaceCullingFilter);
@@ -35,17 +35,17 @@ public class PushPipelineFactory {
         // Not possible (without a hack) in the push pipeline
 
         // TODO 4. add coloring (space unimportant)
-        ColorFilter<Face> colorFilter = new ColorFilter<>(pd);
+        ColorPushFilter<Face> colorFilter = new ColorPushFilter<>(pd);
         Pipe<Face> toColorFilter = new Pipe<>();
         backfaceCullingFilter.setPipeSuccessor(toColorFilter);
         toColorFilter.setSuccessor(colorFilter);
 
         // lighting can be switched on/off
-        PerspectiveProjectionFilter perspectiveProjectionFilter = new PerspectiveProjectionFilter(pd);
+        PerspectiveProjectionPushFilter perspectiveProjectionFilter = new PerspectiveProjectionPushFilter(pd);
 
         if (pd.isPerformLighting()) {
             // 4a. perform lighting in VIEW SPACE
-            LightingFilter lightingFilter = new LightingFilter(pd);
+            LightingPushFilter lightingFilter = new LightingPushFilter(pd);
 
             Pipe<Pair<Face, Color>> toLightingFilter = new Pipe<>();
             colorFilter.setPipeSuccessor(toLightingFilter);
@@ -63,7 +63,7 @@ public class PushPipelineFactory {
         }
 
         // perform perspective division to screen coordinates
-        ScreenSpaceTransformationFilter screenSpaceTransformationFilter = new ScreenSpaceTransformationFilter(pd);
+        ScreenSpaceTransformationPushFilter screenSpaceTransformationFilter = new ScreenSpaceTransformationPushFilter(pd);
         Pipe<Pair<Face, Color>> toScreenSpaceTransformation = new Pipe<>();
         perspectiveProjectionFilter.setPipeSuccessor(toScreenSpaceTransformation);
         toScreenSpaceTransformation.setSuccessor(screenSpaceTransformationFilter);
