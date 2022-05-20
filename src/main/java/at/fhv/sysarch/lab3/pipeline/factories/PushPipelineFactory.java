@@ -17,7 +17,7 @@ public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
 
         // TODO: push from the source (model)
-        DataSource<Model> dataSource = new DataSource<>();
+        DataSource dataSource = new DataSource();
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
         ModelViewTransformationFilter modelViewFilter = new ModelViewTransformationFilter(pd);
