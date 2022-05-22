@@ -34,7 +34,7 @@ public class DataSource implements PullFilter<Face, Face> {
 
     @Override
     public void setPipePredecessor(Pipe<Face> predecessor) {
-
+        // no predecessor
     }
 
     @Override

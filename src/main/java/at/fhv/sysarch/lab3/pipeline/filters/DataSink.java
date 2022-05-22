@@ -59,7 +59,7 @@ public class DataSink implements PullFilter<Pair<Face, Color>, Pair<Face, Color>
 
     @Override
     public void setPipeSuccessor(Pipe<Pair<Face, Color>> successor) {
-
+        // no successor
     }
 
     @Override
