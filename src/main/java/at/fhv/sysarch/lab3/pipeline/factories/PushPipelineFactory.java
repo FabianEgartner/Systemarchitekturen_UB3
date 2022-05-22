@@ -75,7 +75,7 @@ public class PushPipelineFactory {
         toSink.setSuccessor(dataSink);
 
         // returning an animation renderer which handles clearing of the
-        // viewport and computation of the praction
+        // viewport and computation of the fraction
         return new AnimationRenderer(pd) {
 
             // rotation variable goes in here
@@ -96,14 +96,15 @@ public class PushPipelineFactory {
                 // create new model rotation matrix using pd.modelRotAxis
                 Vec3 modelRotAxis = pd.getModelRotAxis();
 
-                // compute updated model-view tranformation
+                // compute updated model-view transformation
                 Mat4 rotationMatrix = Matrices.rotate((float) radiant, modelRotAxis);
 
                 // update model-view filter
                 modelViewFilter.setRotationMatrix(rotationMatrix);
 
                 // trigger rendering of the pipeline
-                dataSource.write(model);
+                dataSource.setModel(model);
+                dataSource.write();
             }
         };
     }
