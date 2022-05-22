@@ -52,9 +52,9 @@ public class PushPipelineFactory {
             toLightingFilter.setSuccessor(lightingFilter);
 
             // 5. perform projection transformation on VIEW SPACE coordinates
-            Pipe<Pair<Face, Color>> lightingtoPerspectivePipe = new Pipe<>();
-            lightingFilter.setPipeSuccessor(lightingtoPerspectivePipe);
-            lightingtoPerspectivePipe.setSuccessor(perspectiveProjectionFilter);
+            Pipe<Pair<Face, Color>> lightingToPerspectivePipe = new Pipe<>();
+            lightingFilter.setPipeSuccessor(lightingToPerspectivePipe);
+            lightingToPerspectivePipe.setSuccessor(perspectiveProjectionFilter);
         } else {
             // 5. perform projection transformation
             Pipe<Pair<Face, Color>> colorToPerspectivePipe = new Pipe<>();
