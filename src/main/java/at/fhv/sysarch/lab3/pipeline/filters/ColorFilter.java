@@ -32,7 +32,14 @@ public class ColorFilter implements PullFilter<Pair<Face, Color>, Face>, PushFil
     @Override
     public void write(Face input) {
         Pair<Face, Color> result = process(input);
-        this.successor.write(result);
+
+        if (null == result) {
+            return;
+        }
+
+        if (null != this.successor) {
+            this.successor.write(result);
+        }
     }
 
     @Override

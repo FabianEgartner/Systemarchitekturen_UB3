@@ -41,7 +41,7 @@ public class PushPipelineFactory {
         toColorFilter.setSuccessor(colorFilter);
 
         // lighting can be switched on/off
-        PerspectiveProjectionPushFilter perspectiveProjectionFilter = new PerspectiveProjectionPushFilter(pd);
+        PerspectiveProjectionFilter perspectiveProjectionFilter = new PerspectiveProjectionFilter(pd);
 
         if (pd.isPerformLighting()) {
             // 4a. perform lighting in VIEW SPACE
@@ -63,7 +63,7 @@ public class PushPipelineFactory {
         }
 
         // perform perspective division to screen coordinates
-        ScreenSpaceTransformationPushFilter screenSpaceTransformationFilter = new ScreenSpaceTransformationPushFilter(pd);
+        ScreenSpaceTransformationFilter screenSpaceTransformationFilter = new ScreenSpaceTransformationFilter(pd);
         Pipe<Pair<Face, Color>> toScreenSpaceTransformation = new Pipe<>();
         perspectiveProjectionFilter.setPipeSuccessor(toScreenSpaceTransformation);
         toScreenSpaceTransformation.setSuccessor(screenSpaceTransformationFilter);

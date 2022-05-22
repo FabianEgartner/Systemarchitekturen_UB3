@@ -10,9 +10,9 @@ import java.util.Queue;
 
 public class DepthSortingFilter implements PullFilter<Face, Face> {
 
+    private Pipe<Face> predecessor;
     private final Queue<Face> processQueue;
     private boolean bufferingMode;
-    private Pipe<Face> predecessor;
 
     public DepthSortingFilter() {
         bufferingMode = true;

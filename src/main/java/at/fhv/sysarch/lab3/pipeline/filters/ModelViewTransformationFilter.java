@@ -47,9 +47,9 @@ public class ModelViewTransformationFilter implements PullFilter<Face, Face>, Pu
     public Face process(Face face) {
         // compute updated model-view transformation
         Mat4 modelTranslation = pd.getModelTranslation();
-        Mat4 viewTransformation = pd.getViewTransform();
+        Mat4 viewTransform = pd.getViewTransform();
 
-        Mat4 updatedTransformation = viewTransformation.multiply(modelTranslation).multiply(rotationMatrix);
+        Mat4 updatedTransformation = viewTransform.multiply(modelTranslation).multiply(rotationMatrix);
 
         return new Face(
                 updatedTransformation.multiply(face.getV1()),

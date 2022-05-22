@@ -7,16 +7,15 @@ import at.fhv.sysarch.lab3.pipeline.obj.Pair;
 import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
 import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.utils.PipeLineUtils;
-import com.hackoeur.jglm.Mat4;
 import javafx.scene.paint.Color;
 
-public class PerspectiveProjectionPushFilter implements PullFilter<Pair<Face, Color>, Pair<Face, Color>>, PushFilter<Pair<Face, Color>, Pair<Face, Color>> {
+public class ScreenSpaceTransformationFilter implements PullFilter<Pair<Face, Color>, Pair<Face, Color>>, PushFilter<Pair<Face, Color>, Pair<Face, Color>> {
 
     private Pipe<Pair<Face, Color>> predecessor;
     private Pipe<Pair<Face, Color>> successor;
     private final PipelineData pd;
 
-    public PerspectiveProjectionPushFilter(PipelineData pd) {
+    public ScreenSpaceTransformationFilter(PipelineData pd) {
         this.pd = pd;
     }
 
@@ -34,8 +33,8 @@ public class PerspectiveProjectionPushFilter implements PullFilter<Pair<Face, Co
     }
 
     @Override
-    public void write(Pair<Face, Color> pair) {
-        Pair<Face, Color> result = process(pair);
+    public void write(Pair<Face, Color> input) {
+        Pair<Face, Color> result = process(input);
 
         if (null != this.successor) {
             this.successor.write(result);
@@ -43,18 +42,24 @@ public class PerspectiveProjectionPushFilter implements PullFilter<Pair<Face, Co
     }
 
     @Override
-    public Pair<Face, Color> process(Pair<Face, Color> pair) {
-        Mat4 projectionTransform = pd.getProjTransform();
-        Face face = pair.fst();
+    public Pair<Face, Color> process(Pair<Face, Color> input) {
+        Face face = input.fst();
 
-        Face projectedFace = new Face(
-                projectionTransform.multiply(face.getV1()),
-                projectionTransform.multiply(face.getV2()),
-                projectionTransform.multiply(face.getV3()),
+        Face dividedFace = new Face(
+                face.getV1().multiply((1.0f / face.getV1().getW())),
+                face.getV2().multiply((1.0f / face.getV2().getW())),
+                face.getV3().multiply((1.0f / face.getV3().getW())),
                 face
         );
 
-        return new Pair<>(projectedFace, pair.snd());
+        Face transformedFace = new Face(
+                pd.getViewportTransform().multiply(dividedFace.getV1()),
+                pd.getViewportTransform().multiply(dividedFace.getV2()),
+                pd.getViewportTransform().multiply(dividedFace.getV3()),
+                dividedFace
+        );
+
+        return new Pair<>(transformedFace, input.snd());
     }
 
     @Override
