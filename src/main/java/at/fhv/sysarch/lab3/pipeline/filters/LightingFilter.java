@@ -7,8 +7,6 @@ import at.fhv.sysarch.lab3.pipeline.obj.Pair;
 import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
 import at.fhv.sysarch.lab3.pipeline.obj.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.utils.PipeLineUtils;
-import com.hackoeur.jglm.Vec3;
-import com.hackoeur.jglm.Vec4;
 import javafx.scene.paint.Color;
 
 public class LightingFilter implements PullFilter<Pair<Face, Color>, Pair<Face, Color>>, PushFilter<Pair<Face, Color>, Pair<Face, Color>> {
