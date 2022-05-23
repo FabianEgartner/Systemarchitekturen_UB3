@@ -46,7 +46,6 @@ public class PushPipelineFactory {
         if (pd.isPerformLighting()) {
             // 4a. perform lighting in VIEW SPACE
             LightingFilter lightingFilter = new LightingFilter(pd);
-
             Pipe<Pair<Face, Color>> toLightingFilter = new Pipe<>();
             colorFilter.setPipeSuccessor(toLightingFilter);
             toLightingFilter.setSuccessor(lightingFilter);

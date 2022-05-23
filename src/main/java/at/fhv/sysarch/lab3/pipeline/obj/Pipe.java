@@ -12,12 +12,12 @@ public class Pipe<I> implements PullPipe<I>, PushPipe<I> {
 
     @Override
     public I read() {
-        return null;
+        return this.predecessor.read();
     }
 
     @Override
     public void write(I input) {
-
+        this.successor.write(input);
     }
 
     @Override
