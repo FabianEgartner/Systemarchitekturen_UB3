@@ -12,8 +12,6 @@ import com.hackoeur.jglm.Matrices;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
-
 public class PullPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // pull from the source (model)
