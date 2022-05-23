@@ -39,13 +39,14 @@ public class DepthSortingFilter implements PullFilter<Face, Face> {
 
     @Override
     public Face read() {
+        // When buffering mode active - pull all faces from previous filter
         while (bufferingMode) {
             Face input = predecessor.read();
-
             if (null == input) {
                 continue;
             }
 
+            // Once end of stream is reached, end buffering mode
             if (PipeLineUtils.isFaceMakingEnd(input)) {
                 bufferingMode = false;
             }
@@ -53,6 +54,7 @@ public class DepthSortingFilter implements PullFilter<Face, Face> {
             processQueue.add(input);
         }
 
+        // When buffer empty, start buffering mode
         if (processQueue.size() <= 1) {
             bufferingMode = true;
         }

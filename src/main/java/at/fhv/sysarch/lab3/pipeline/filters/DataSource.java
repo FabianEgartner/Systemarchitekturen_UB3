@@ -12,6 +12,13 @@ public class DataSource implements PullFilter<Face, Face> {
     private Model model;
     private int currentFaceIndex;
 
+    public DataSource() {
+    }
+
+    public DataSource(Model model) {
+        this.model = model;
+    }
+
     @Override
     public Face read() {
         if (currentFaceIndex >= model.getFaces().size()) {

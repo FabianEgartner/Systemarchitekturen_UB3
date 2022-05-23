@@ -15,8 +15,7 @@ import javafx.scene.paint.Color;
 public class PullPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // pull from the source (model)
-        DataSource dataSource = new DataSource();
-        dataSource.setModel(pd.getModel());
+        DataSource dataSource = new DataSource(pd.getModel());
 
         // 1. perform model-view transformation from model to VIEW SPACE coordinates (see C.2 of Lecture Notes)
         ModelViewTransformationFilter modelViewFilter = new ModelViewTransformationFilter(pd);
@@ -26,9 +25,9 @@ public class PullPipelineFactory {
 
         // 2. perform backface culling in VIEW SPACE (see C.4 of Lecture Notes)
         BackfaceCullingFilter backfaceCullingFilter = new BackfaceCullingFilter();
-        Pipe<Face> toBackfacePipeFilter = new Pipe<>();
-        backfaceCullingFilter.setPipePredecessor(toBackfacePipeFilter);
-        toBackfacePipeFilter.setPredecessor(modelViewFilter);
+        Pipe<Face> toBackfaceCullingFilter = new Pipe<>();
+        backfaceCullingFilter.setPipePredecessor(toBackfaceCullingFilter);
+        toBackfaceCullingFilter.setPredecessor(modelViewFilter);
 
         // 3. perform depth sorting in VIEW SPACE (see C.3 of Lecture Notes)
         DepthSortingFilter depthSortingFilter = new DepthSortingFilter();
