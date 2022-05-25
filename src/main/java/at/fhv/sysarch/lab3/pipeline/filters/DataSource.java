@@ -6,6 +6,9 @@ import at.fhv.sysarch.lab3.pipeline.api.PullFilter;
 import at.fhv.sysarch.lab3.pipeline.obj.Pipe;
 import com.hackoeur.jglm.Vec4;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 public class DataSource implements PullFilter<Face, Face> {
 
     private Pipe<Face> successor;
@@ -53,6 +56,10 @@ public class DataSource implements PullFilter<Face, Face> {
 
     public void setModel(Model model) {
         this.model = model;
+    }
+
+    public void setCurrentFaceIndex(int currentFaceIndex) {
+        this.currentFaceIndex = currentFaceIndex;
     }
 
     @Override

@@ -101,6 +101,7 @@ public class PullPipelineFactory {
 
                 // trigger rendering of the pipeline
                 dataSource.setModel(model);
+                dataSource.setCurrentFaceIndex(0);
                 dataSink.read();
             }
         };
