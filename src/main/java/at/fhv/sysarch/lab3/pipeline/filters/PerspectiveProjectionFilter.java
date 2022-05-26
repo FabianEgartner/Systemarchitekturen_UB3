@@ -24,11 +24,10 @@ public class PerspectiveProjectionFilter implements PullFilter<Pair<Face, Color>
     public Pair<Face, Color> read() {
         Pair<Face, Color> input = predecessor.read();
 
-        if (null == input) {
+        if (null == input)
             return null;
-        } else if (PipeLineUtils.isFaceMakingEnd(input.fst())) {
+        else if (PipeLineUtils.isFaceEnd(input.fst()))
             return input;
-        }
 
         return process(input);
     }
@@ -37,9 +36,8 @@ public class PerspectiveProjectionFilter implements PullFilter<Pair<Face, Color>
     public void write(Pair<Face, Color> pair) {
         Pair<Face, Color> result = process(pair);
 
-        if (null != this.successor) {
+        if (null != this.successor)
             this.successor.write(result);
-        }
     }
 
     @Override

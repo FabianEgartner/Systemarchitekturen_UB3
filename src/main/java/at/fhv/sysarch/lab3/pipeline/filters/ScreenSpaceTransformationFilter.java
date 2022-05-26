@@ -23,11 +23,10 @@ public class ScreenSpaceTransformationFilter implements PullFilter<Pair<Face, Co
     public Pair<Face, Color> read() {
         Pair<Face, Color> input = predecessor.read();
 
-        if (null == input) {
+        if (null == input)
             return null;
-        } else if (PipeLineUtils.isFaceMakingEnd(input.fst())) {
+        else if (PipeLineUtils.isFaceEnd(input.fst()))
             return input;
-        }
 
         return process(input);
     }
@@ -36,9 +35,8 @@ public class ScreenSpaceTransformationFilter implements PullFilter<Pair<Face, Co
     public void write(Pair<Face, Color> input) {
         Pair<Face, Color> result = process(input);
 
-        if (null != this.successor) {
+        if (null != this.successor)
             this.successor.write(result);
-        }
     }
 
     @Override

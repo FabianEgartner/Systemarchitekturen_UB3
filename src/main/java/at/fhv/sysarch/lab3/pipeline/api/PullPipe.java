@@ -5,5 +5,4 @@ public interface PullPipe<I> {
     I read();
 
     void setPredecessor(PullFilter<I, ?> predecessor);
-
 }

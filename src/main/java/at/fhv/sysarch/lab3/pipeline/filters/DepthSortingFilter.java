@@ -12,52 +12,45 @@ public class DepthSortingFilter implements PullFilter<Face, Face> {
 
     private Pipe<Face> predecessor;
     private final Queue<Face> processQueue;
-    private boolean bufferingMode;
+    private boolean buffMode;
 
     public DepthSortingFilter() {
-        bufferingMode = true;
+        buffMode = true;
         processQueue = new PriorityQueue<>((face1, face2) -> {
-            // First face
-            float firstZ1 = face1.getV1().getZ();
-            float firstZ2 = face1.getV2().getZ();
-            float firstZ3 = face1.getV3().getZ();
 
-            float firstFaceAverageZ = (firstZ1 + firstZ2 + firstZ3) / 3;
+            float fstZ1 = face1.getV1().getZ();
+            float fstZ2 = face1.getV2().getZ();
+            float fstZ3 = face1.getV3().getZ();
 
-            // Second face
-            float secondZ1 = face2.getV1().getZ();
-            float secondZ2 = face2.getV2().getZ();
-            float secondZ3 = face2.getV3().getZ();
+            float fstFaceAvgZ = (fstZ1 + fstZ2 + fstZ3) / 3;
 
-            float secondFaceAverageZ = (secondZ1 + secondZ2 + secondZ3) / 3;
+            float sndZ1 = face2.getV1().getZ();
+            float sndZ2 = face2.getV2().getZ();
+            float sndZ3 = face2.getV3().getZ();
 
-            // Computed value is too small for rounding -> value * 100
-            // value + 0.5 to round without using, for example, Math.round()
-            return (int) ((firstFaceAverageZ - secondFaceAverageZ) * 100 + 0.5);
+            float sndFaceAvgZ = (sndZ1 + sndZ2 + sndZ3) / 3;
+
+            return Math.round((int) ((fstFaceAvgZ - sndFaceAvgZ) * 100));
         });
     }
 
     @Override
     public Face read() {
-        // When buffering mode active - pull all faces from previous filter
-        while (bufferingMode) {
-            Face input = predecessor.read();
-            if (null == input) {
-                continue;
-            }
 
-            // Once end of stream is reached, end buffering mode
-            if (PipeLineUtils.isFaceMakingEnd(input)) {
-                bufferingMode = false;
-            }
+        while (buffMode) {
+            Face input = predecessor.read();
+
+            if (null == input)
+                continue;
+
+            if (PipeLineUtils.isFaceEnd(input))
+                buffMode = false;
 
             processQueue.add(input);
         }
 
-        // When buffer empty, start buffering mode
-        if (processQueue.size() <= 1) {
-            bufferingMode = true;
-        }
+        if (processQueue.size() <= 1)
+            buffMode = true;
 
         return this.processQueue.poll();
     }

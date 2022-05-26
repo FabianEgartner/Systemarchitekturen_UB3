@@ -22,9 +22,8 @@ public class ColorFilter implements PullFilter<Pair<Face, Color>, Face>, PushFil
     public Pair<Face, Color> read() {
         Face input = predecessor.read();
 
-        if (null == input) {
+        if (null == input)
             return null;
-        }
 
         return process(input);
     }
@@ -33,13 +32,11 @@ public class ColorFilter implements PullFilter<Pair<Face, Color>, Face>, PushFil
     public void write(Face input) {
         Pair<Face, Color> result = process(input);
 
-        if (null == result) {
+        if (null == result)
             return;
-        }
 
-        if (null != this.successor) {
+        if (null != this.successor)
             this.successor.write(result);
-        }
     }
 
     @Override

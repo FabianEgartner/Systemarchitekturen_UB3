@@ -23,11 +23,10 @@ public class LightingFilter implements PullFilter<Pair<Face, Color>, Pair<Face, 
     public Pair<Face, Color> read() {
         Pair<Face, Color> input = predecessor.read();
 
-        if (null == input) {
+        if (null == input)
             return null;
-        } else if (PipeLineUtils.isFaceMakingEnd(input.fst())) {
+        else if (PipeLineUtils.isFaceEnd(input.fst()))
             return input;
-        }
 
         return process(input);
     }
@@ -36,13 +35,11 @@ public class LightingFilter implements PullFilter<Pair<Face, Color>, Pair<Face, 
     public void write(Pair<Face, Color> pair) {
         Pair<Face, Color> result = process(pair);
 
-        if (null == result) {
+        if (null == result)
             return;
-        }
 
-        if (this.successor != null) {
+        if (this.successor != null)
             this.successor.write(result);
-        }
     }
 
     @Override
@@ -50,9 +47,8 @@ public class LightingFilter implements PullFilter<Pair<Face, Color>, Pair<Face, 
         Face face = pair.fst();
         float dotProduct = face.getN1().toVec3().dot(pd.getLightPos().getUnitVector());
 
-        if (dotProduct <= 0) {
+        if (dotProduct <= 0)
             return new Pair<>(face, Color.BLACK);
-        }
 
         return new Pair<>(face, pair.snd().deriveColor(0, 1, dotProduct, 1));
     }

@@ -5,10 +5,10 @@ import com.hackoeur.jglm.Vec4;
 
 public class PipeLineUtils {
 
-    public static boolean isFaceMakingEnd(Face face) {
-        if (null == face) {
+    public static boolean isFaceEnd(Face face) {
+
+        if (null == face)
             return false;
-        }
 
         return face.getV1().equals(Vec4.VEC4_ZERO) &&
                 face.getV2().equals(Vec4.VEC4_ZERO) &&
@@ -17,5 +17,4 @@ public class PipeLineUtils {
                 face.getN2().equals(Vec4.VEC4_ZERO) &&
                 face.getN3().equals(Vec4.VEC4_ZERO);
     }
-
 }

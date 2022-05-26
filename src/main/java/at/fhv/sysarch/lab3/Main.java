@@ -20,9 +20,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class Main extends Application {
-//    private final static int VIEW_WIDTH  = 860;
-//    private final static int VIEW_HEIGHT = 540;
-
     private final static int VIEW_WIDTH  = 800;
     private final static int VIEW_HEIGHT = 480;
 

@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 
 public class PullPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
+
         // pull from the source (model)
         DataSource dataSource = new DataSource(pd.getModel());
 
@@ -86,6 +87,7 @@ public class PullPipelineFactory {
              */
             @Override
             protected void render(float fraction, Model model) {
+
                 // compute rotation in radians
                 rotation += fraction;
                 double radiant = rotation % (2 * Math.PI); // 2 PI = 360°
@@ -93,14 +95,13 @@ public class PullPipelineFactory {
                 // create new model rotation matrix using pd.modelRotAxis
                 Mat4 rotationMatrix = Matrices.rotate(
                         (float) radiant,
-                        pd.getModelRotAxis() // Rotation axis is a Vec3 with y=1 and x/z=0
+                        pd.getModelRotAxis()
                 );
 
                 // update model-view filter
                 modelViewFilter.setRotationMatrix(rotationMatrix);
 
                 // trigger rendering of the pipeline
-                dataSource.setModel(model);
                 dataSource.setCurrentFaceIndex(0);
                 dataSink.read();
             }

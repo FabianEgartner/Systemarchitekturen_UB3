@@ -9,5 +9,4 @@ public interface PullFilter<I, O> {
     void setPipePredecessor(Pipe<O> predecessor);
 
     I process(O input);
-
 }

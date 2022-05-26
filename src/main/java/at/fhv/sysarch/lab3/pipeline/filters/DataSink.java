@@ -15,7 +15,6 @@ public class DataSink implements PullFilter<Pair<Face, Color>, Pair<Face, Color>
 
     private Pipe<Pair<Face, Color>> predecessor;
     private final PipelineData pd;
-    private final int factor = 1;
 
     public DataSink(PipelineData pd) {
         this.pd = pd;
@@ -26,11 +25,10 @@ public class DataSink implements PullFilter<Pair<Face, Color>, Pair<Face, Color>
         while (true) {
             Pair<Face, Color> input = predecessor.read();
 
-            if (null == input) {
+            if (null == input)
                 continue;
-            } else if (PipeLineUtils.isFaceMakingEnd(input.fst())) {
+            else if (PipeLineUtils.isFaceEnd(input.fst()))
                 break;
-            }
 
             process(input);
         }
@@ -41,15 +39,12 @@ public class DataSink implements PullFilter<Pair<Face, Color>, Pair<Face, Color>
     @Override
     public void write(Pair<Face, Color> pair) {
 
-        if (pd.getRenderingMode().equals(RenderingMode.WIREFRAME)) {
+        if (pd.getRenderingMode().equals(RenderingMode.WIREFRAME))
             renderWireframe(pd.getGraphicsContext(), pair);
-        }
-        else if (pd.getRenderingMode().equals(RenderingMode.FILLED)) {
+        else if (pd.getRenderingMode().equals(RenderingMode.FILLED))
             renderFilled(pd.getGraphicsContext(), pair);
-        }
-        else {
+        else
             renderPoint(pd.getGraphicsContext(), pair);
-        }
     }
 
     @Override
@@ -93,7 +88,6 @@ public class DataSink implements PullFilter<Pair<Face, Color>, Pair<Face, Color>
                 break;
         }
 
-        // No return value needed - rendering only
         return null;
     }
 
@@ -103,14 +97,14 @@ public class DataSink implements PullFilter<Pair<Face, Color>, Pair<Face, Color>
 
         gc.setStroke(color);
 
-        double dx1 = face.getV1().getX() * factor;
-        double dx2 = face.getV2().getX() * factor;
-        double dx3 = face.getV3().getX() * factor;
+        double dx1 = face.getV1().getX();
+        double dx2 = face.getV2().getX();
+        double dx3 = face.getV3().getX();
         double[] x = {dx1, dx2, dx3};
 
-        double dy1 = face.getV1().getY() * factor;
-        double dy2 = face.getV2().getY() * factor;
-        double dy3 = face.getV3().getY() * factor;
+        double dy1 = face.getV1().getY();
+        double dy2 = face.getV2().getY();
+        double dy3 = face.getV3().getY();
         double[] y = {dy1, dy2, dy3};
 
         gc.strokePolygon(x, y, 3);
@@ -122,14 +116,14 @@ public class DataSink implements PullFilter<Pair<Face, Color>, Pair<Face, Color>
 
         gc.setFill(color);
 
-        double dx1 = face.getV1().getX() * factor;
-        double dx2 = face.getV2().getX() * factor;
-        double dx3 = face.getV3().getX() * factor;
+        double dx1 = face.getV1().getX();
+        double dx2 = face.getV2().getX();
+        double dx3 = face.getV3().getX();
         double[] x = {dx1, dx2, dx3};
 
-        double dy1 = face.getV1().getY() * factor;
-        double dy2 = face.getV2().getY() * factor;
-        double dy3 = face.getV3().getY() * factor;
+        double dy1 = face.getV1().getY();
+        double dy2 = face.getV2().getY();
+        double dy3 = face.getV3().getY();
         double[] y = {dy1, dy2, dy3};
 
         gc.fillPolygon(x, y, 3);
@@ -141,6 +135,6 @@ public class DataSink implements PullFilter<Pair<Face, Color>, Pair<Face, Color>
 
         gc.setFill(color);
 
-        gc.fillOval(face.getV1().getX()*factor, face.getV1().getY()*factor, 3, 3);
+        gc.fillOval(face.getV1().getX(), face.getV1().getY(), 3, 3);
     }
 }

@@ -9,5 +9,4 @@ public interface PushFilter<I, O> {
     void setPipeSuccessor(Pipe<O> successor);
 
     O process(I input);
-
 }

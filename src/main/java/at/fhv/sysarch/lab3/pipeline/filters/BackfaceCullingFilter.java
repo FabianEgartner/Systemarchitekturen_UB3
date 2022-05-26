@@ -16,11 +16,10 @@ public class BackfaceCullingFilter implements PullFilter<Face, Face>, PushFilter
     public Face read() {
         Face input = predecessor.read();
 
-        if (null == input) {
+        if (null == input)
             return null;
-        } else if (PipeLineUtils.isFaceMakingEnd(input)) {
+        else if (PipeLineUtils.isFaceEnd(input))
             return input;
-        }
 
         return process(input);
     }
@@ -29,13 +28,11 @@ public class BackfaceCullingFilter implements PullFilter<Face, Face>, PushFilter
     public void write(Face input) {
         Face result = process(input);
 
-        if (null == result) {
+        if (null == result)
             return;
-        }
 
-        if (null != this.successor) {
+        if (null != this.successor)
             this.successor.write(result);
-        }
     }
 
     @Override
@@ -44,9 +41,8 @@ public class BackfaceCullingFilter implements PullFilter<Face, Face>, PushFilter
         Vec4 n1 = face.getN1();
         float dotProduct = v1.dot(n1);
 
-        if (dotProduct > 0) {
+        if (dotProduct > 0)
             return null;
-        }
 
         return face;
     }

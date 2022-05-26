@@ -15,8 +15,7 @@ public class DataSource implements PullFilter<Face, Face> {
     private Model model;
     private int currentFaceIndex;
 
-    public DataSource() {
-    }
+    public DataSource() {}
 
     public DataSource(Model model) {
         this.model = model;
@@ -25,7 +24,7 @@ public class DataSource implements PullFilter<Face, Face> {
     @Override
     public Face read() {
         if (currentFaceIndex >= model.getFaces().size()) {
-            // Special marker face to indicate end of data
+
             return new Face(
                     Vec4.VEC4_ZERO,
                     Vec4.VEC4_ZERO,
@@ -40,9 +39,8 @@ public class DataSource implements PullFilter<Face, Face> {
     }
 
     public void write() {
-        for (Face face : model.getFaces()) {
+        for (Face face : model.getFaces())
             successor.write(face);
-        }
     }
 
     @Override

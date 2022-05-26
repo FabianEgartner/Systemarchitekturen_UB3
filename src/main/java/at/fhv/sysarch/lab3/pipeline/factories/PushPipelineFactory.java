@@ -16,25 +16,25 @@ import javafx.scene.paint.Color;
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
 
-        // TODO: push from the source (model)
+        // push from the source (model)
         DataSource dataSource = new DataSource();
 
-        // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
+        // 1. perform model-view transformation from model to VIEW SPACE coordinates
         ModelViewTransformationFilter modelViewFilter = new ModelViewTransformationFilter(pd);
         Pipe<Face> toModelViewFilter = new Pipe<>();
         dataSource.setPipeSuccessor(toModelViewFilter);
         toModelViewFilter.setSuccessor(modelViewFilter);
 
-        // TODO 2. perform backface culling in VIEW SPACE
+        // 2. perform backface culling in VIEW SPACE
         BackfaceCullingFilter backfaceCullingFilter = new BackfaceCullingFilter();
         Pipe<Face> toBackfaceCullingFilter = new Pipe<>();
         modelViewFilter.setPipeSuccessor(toBackfaceCullingFilter);
         toBackfaceCullingFilter.setSuccessor(backfaceCullingFilter);
 
-        // TODO 3. perform depth sorting in VIEW SPACE
-        // Not possible (without a hack) in the push pipeline
+        // 3. perform depth sorting in VIEW SPACE
+        // implemented in PullPipelineFactory
 
-        // TODO 4. add coloring (space unimportant)
+        // 4. add coloring (space unimportant)
         ColorFilter colorFilter = new ColorFilter(pd);
         Pipe<Face> toColorFilter = new Pipe<>();
         backfaceCullingFilter.setPipeSuccessor(toColorFilter);
@@ -44,6 +44,7 @@ public class PushPipelineFactory {
         PerspectiveProjectionFilter perspectiveProjectionFilter = new PerspectiveProjectionFilter(pd);
 
         if (pd.isPerformLighting()) {
+
             // 4a. perform lighting in VIEW SPACE
             LightingFilter lightingFilter = new LightingFilter(pd);
             Pipe<Pair<Face, Color>> toLightingFilter = new Pipe<>();
@@ -90,7 +91,7 @@ public class PushPipelineFactory {
 
                 // compute rotation in radians
                 rotation += fraction;
-                double radiant = rotation % (2 * Math.PI); // 2 PI = 360°
+                double radiant = rotation % (2 * Math.PI);
 
                 // create new model rotation matrix using pd.modelRotAxis
                 Vec3 modelRotAxis = pd.getModelRotAxis();

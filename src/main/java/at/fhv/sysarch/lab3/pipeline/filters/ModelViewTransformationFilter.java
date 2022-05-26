@@ -21,11 +21,10 @@ public class ModelViewTransformationFilter implements PullFilter<Face, Face>, Pu
     public Face read() {
         Face input = predecessor.read();
 
-        if (null == input) {
+        if (null == input)
             return null;
-        } else if (PipeLineUtils.isFaceMakingEnd(input)) {
+        else if (PipeLineUtils.isFaceEnd(input))
             return input;
-        }
 
         return process(input);
     }
@@ -34,18 +33,16 @@ public class ModelViewTransformationFilter implements PullFilter<Face, Face>, Pu
     public void write(Face input) {
         Face result = process(input);
 
-        if (null == result) {
+        if (null == result)
             return;
-        }
 
-        if (this.successor != null) {
+        if (this.successor != null)
             this.successor.write(result);
-        }
     }
 
     @Override
     public Face process(Face face) {
-        // compute updated model-view transformation
+
         Mat4 modelTranslation = pd.getModelTranslation();
         Mat4 viewTransform = pd.getViewTransform();
 
