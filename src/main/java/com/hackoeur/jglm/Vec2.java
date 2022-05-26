@@ -1,9 +1,9 @@
 package com.hackoeur.jglm;
 
-import java.nio.FloatBuffer;
-
 import com.hackoeur.jglm.support.Compare;
 import com.hackoeur.jglm.support.FastMath;
+
+import java.nio.FloatBuffer;
 
 public final class Vec2 extends AbstractVec {
 	public static final Vec2 VEC2_ZERO = new Vec2();
