@@ -16,26 +16,26 @@ import javafx.scene.paint.Color;
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
 
-        // TODO: push from the source (model)
-        DataSource<Model> dataSource = new DataSource<>();
+        // push from the source (model)
+        DataSource dataSource = new DataSource();
 
-        // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
-        ModelViewTransformationFilter<Face> modelViewFilter = new ModelViewTransformationFilter<>(pd);
+        // 1. perform model-view transformation from model to VIEW SPACE coordinates
+        ModelViewTransformationFilter modelViewFilter = new ModelViewTransformationFilter(pd);
         Pipe<Face> toModelViewFilter = new Pipe<>();
         dataSource.setPipeSuccessor(toModelViewFilter);
         toModelViewFilter.setSuccessor(modelViewFilter);
 
-        // TODO 2. perform backface culling in VIEW SPACE
-        BackfaceCullingFilter<Face> backfaceCullingFilter = new BackfaceCullingFilter<>();
+        // 2. perform backface culling in VIEW SPACE
+        BackfaceCullingFilter backfaceCullingFilter = new BackfaceCullingFilter();
         Pipe<Face> toBackfaceCullingFilter = new Pipe<>();
         modelViewFilter.setPipeSuccessor(toBackfaceCullingFilter);
         toBackfaceCullingFilter.setSuccessor(backfaceCullingFilter);
 
-        // TODO 3. perform depth sorting in VIEW SPACE
-        // Not possible (without a hack) in the push pipeline
+        // 3. perform depth sorting in VIEW SPACE
+        // implemented in PullPipelineFactory
 
-        // TODO 4. add coloring (space unimportant)
-        ColorFilter<Face> colorFilter = new ColorFilter<>(pd);
+        // 4. add coloring (space unimportant)
+        ColorFilter colorFilter = new ColorFilter(pd);
         Pipe<Face> toColorFilter = new Pipe<>();
         backfaceCullingFilter.setPipeSuccessor(toColorFilter);
         toColorFilter.setSuccessor(colorFilter);
@@ -44,17 +44,17 @@ public class PushPipelineFactory {
         PerspectiveProjectionFilter perspectiveProjectionFilter = new PerspectiveProjectionFilter(pd);
 
         if (pd.isPerformLighting()) {
+
             // 4a. perform lighting in VIEW SPACE
             LightingFilter lightingFilter = new LightingFilter(pd);
-
             Pipe<Pair<Face, Color>> toLightingFilter = new Pipe<>();
             colorFilter.setPipeSuccessor(toLightingFilter);
             toLightingFilter.setSuccessor(lightingFilter);
 
             // 5. perform projection transformation on VIEW SPACE coordinates
-            Pipe<Pair<Face, Color>> lightingtoPerspectivePipe = new Pipe<>();
-            lightingFilter.setPipeSuccessor(lightingtoPerspectivePipe);
-            lightingtoPerspectivePipe.setSuccessor(perspectiveProjectionFilter);
+            Pipe<Pair<Face, Color>> lightingToPerspectivePipe = new Pipe<>();
+            lightingFilter.setPipeSuccessor(lightingToPerspectivePipe);
+            lightingToPerspectivePipe.setSuccessor(perspectiveProjectionFilter);
         } else {
             // 5. perform projection transformation
             Pipe<Pair<Face, Color>> colorToPerspectivePipe = new Pipe<>();
@@ -75,7 +75,7 @@ public class PushPipelineFactory {
         toSink.setSuccessor(dataSink);
 
         // returning an animation renderer which handles clearing of the
-        // viewport and computation of the praction
+        // viewport and computation of the fraction
         return new AnimationRenderer(pd) {
 
             // rotation variable goes in here
@@ -91,19 +91,20 @@ public class PushPipelineFactory {
 
                 // compute rotation in radians
                 rotation += fraction;
-                double radiant = rotation % (2 * Math.PI); // 2 PI = 360°
+                double radiant = rotation % (2 * Math.PI);
 
                 // create new model rotation matrix using pd.modelRotAxis
                 Vec3 modelRotAxis = pd.getModelRotAxis();
 
-                // compute updated model-view tranformation
+                // compute updated model-view transformation
                 Mat4 rotationMatrix = Matrices.rotate((float) radiant, modelRotAxis);
 
                 // update model-view filter
                 modelViewFilter.setRotationMatrix(rotationMatrix);
 
                 // trigger rendering of the pipeline
-                dataSource.write(model);
+                dataSource.setModel(model);
+                dataSource.write();
             }
         };
     }

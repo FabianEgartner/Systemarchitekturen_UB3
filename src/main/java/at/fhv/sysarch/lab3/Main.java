@@ -20,16 +20,13 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class Main extends Application {
-//    private final static int VIEW_WIDTH  = 860;
-//    private final static int VIEW_HEIGHT = 540;
-
     private final static int VIEW_WIDTH  = 800;
     private final static int VIEW_HEIGHT = 480;
 
     private final static int SCENE_WIDTH  = VIEW_WIDTH * 2;
     private final static int SCENE_HEIGHT = VIEW_HEIGHT * 2;
 
-    private final static boolean USE_PUSH_PIPELINE = true;
+    private final static boolean USE_PUSH_PIPELINE = false;
     
     @Override
     public void start(Stage stage) throws IOException {

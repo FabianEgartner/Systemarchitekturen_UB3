@@ -1,17 +1,33 @@
 package at.fhv.sysarch.lab3.pipeline.obj;
 
-import at.fhv.sysarch.lab3.pipeline.api.Filter;
+import at.fhv.sysarch.lab3.pipeline.api.PullFilter;
+import at.fhv.sysarch.lab3.pipeline.api.PullPipe;
+import at.fhv.sysarch.lab3.pipeline.api.PushFilter;
+import at.fhv.sysarch.lab3.pipeline.api.PushPipe;
 
-// TODO: how can pipes be used for different data types?
-public class Pipe<I> {
+public class Pipe<I> implements PullPipe<I>, PushPipe<I> {
 
-    private Filter<I, ?> successor;
+    private PullFilter<I, ?> predecessor;
+    private PushFilter<I, ?> successor;
 
-    public void setSuccessor (Filter<I, ?> successor) {
+    @Override
+    public I read() {
+        return this.predecessor.read();
+    }
+
+    @Override
+    public void write(I input) {
+        this.successor.write(input);
+    }
+
+    @Override
+    public void setPredecessor(PullFilter<I, ?> predecessor) {
+        this.predecessor = predecessor;
+    }
+
+    @Override
+    public void setSuccessor(PushFilter<I, ?> successor) {
         this.successor = successor;
     }
 
-    public void write(I data) {
-        this.successor.write(data);
-    }
 }
