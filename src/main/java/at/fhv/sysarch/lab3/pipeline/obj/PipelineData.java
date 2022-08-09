@@ -1,17 +1,16 @@
-package at.fhv.sysarch.lab3.pipeline;
-
-import java.util.Objects;
-
-import com.hackoeur.jglm.Mat4;
-import com.hackoeur.jglm.Matrices;
-import com.hackoeur.jglm.Vec3;
+package at.fhv.sysarch.lab3.pipeline.obj;
 
 import at.fhv.sysarch.lab3.obj.Model;
 import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import at.fhv.sysarch.lab3.utils.MatrixUtils;
+import com.hackoeur.jglm.Mat4;
+import com.hackoeur.jglm.Matrices;
+import com.hackoeur.jglm.Vec3;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.util.Objects;
 
 public class PipelineData {
     public static class Builder {

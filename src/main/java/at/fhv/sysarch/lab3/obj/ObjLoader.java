@@ -1,5 +1,8 @@
 package at.fhv.sysarch.lab3.obj;
 
+import com.hackoeur.jglm.Vec3;
+import com.hackoeur.jglm.Vec4;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -8,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import com.hackoeur.jglm.Vec3;
-import com.hackoeur.jglm.Vec4;
 
 public class ObjLoader {
 
